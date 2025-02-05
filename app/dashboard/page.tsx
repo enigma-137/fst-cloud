@@ -6,6 +6,7 @@ import PdfUpload from "@/components/PdfUpload"
 import PdfList from "@/components/PdfList"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 export default function Dashboard() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -44,22 +45,25 @@ export default function Dashboard() {
   if (loading) return <div className="min-h-screen flex justify-center items-center">Loading...</div>
 
   return (
-    <div className="p-8">
-  
+<div className="container mx-auto px-4 py-8 max-w-4xl">
       {isAdmin && (
-        <div className="mt-8">
+        <div className="flex justify-center md:justify-start mb-6">
           <Link href="/admin/approve">
-            <Button>Go to Approval Page</Button>
+            <Button className="w-full md:w-auto">Go to Approval Page <ArrowRight className="ml-2 h-3 w-3 inline"/></Button>
           </Link>
         </div>
       )}
-      <div className="mb-8">
-        {/* <h2 className="text-xl font-semibold mb-2">Upload New PDF</h2> */}
-        <PdfUpload />
-      </div>
-      <div>
-        <h2 className="text-xl font-semibold mb-2"></h2>
-        <PdfList />
+      
+      <div className="space-y-8">
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-lg md:text-xl font-semibold mb-4"></h2>
+          <PdfUpload />
+        </div>
+        
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-lg md:text-xl font-semibold mb-4">PDF List</h2>
+          <PdfList />
+        </div>
       </div>
     </div>
   )
