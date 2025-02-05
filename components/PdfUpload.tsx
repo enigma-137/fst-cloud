@@ -21,7 +21,7 @@ export default function PdfUpload() {
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
