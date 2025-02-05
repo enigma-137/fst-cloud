@@ -47,7 +47,7 @@ export default function Dashboard() {
   return (
 <div className="container mx-auto px-4 py-8 max-w-4xl">
       {isAdmin && (
-        <div className="flex md:justify-start mb-6">
+        <div className="md:justify-start mb-6">
           <Link href="/admin/approve">
             <Button className="w-full md:w-auto">Admin <User className="ml-2 h-3 w-3 inline"/></Button>
           </Link>
@@ -55,12 +55,12 @@ export default function Dashboard() {
       )}
       
       <div className="space-y-8">
-        <div className="bg-white shadow-md rounded-lg p-6">
+      
           <h2 className="text-lg md:text-xl font-semibold mb-4"></h2>
           <PdfUpload />
-        </div>
+
         
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="bg-white rounded-lg p-6">
           <h2 className="text-lg md:text-xl font-semibold mb-4">PDF List</h2>
           <PdfList />
         </div>
