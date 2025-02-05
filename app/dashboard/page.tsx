@@ -6,7 +6,7 @@ import PdfUpload from "@/components/PdfUpload"
 import PdfList from "@/components/PdfList"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { User } from "lucide-react"
 
 export default function Dashboard() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -49,7 +49,7 @@ export default function Dashboard() {
       {isAdmin && (
         <div className="flex justify-center md:justify-start mb-6">
           <Link href="/admin/approve">
-            <Button className="w-full md:w-auto">Go to Approval Page <ArrowRight className="ml-2 h-3 w-3 inline"/></Button>
+            <Button className="w-full md:w-auto">Admin <User className="ml-2 h-3 w-3 inline"/></Button>
           </Link>
         </div>
       )}
