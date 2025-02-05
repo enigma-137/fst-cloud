@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { createClient } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -36,6 +36,42 @@ export default function PdfList() {
   useEffect(() => {
     fetchPdfs()
   }, [currentPage, courseFilter, levelFilter, searchTerm])
+  const fetchPdfs = useCallback(async () => {
+    setLoading(true)
+    let query = supabase
+      .from("pdf_files")
+      .select("*", { count: "exact" })
+      .eq("status", "approved")
+      .order("created_at", { ascending: false })
+  
+    if (courseFilter) {
+      query = query.eq("course", courseFilter)
+    }
+    if (levelFilter) {
+      query = query.eq("level", levelFilter)
+    }
+    if (searchTerm) {
+      query = query.or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,tags.cs.{${searchTerm}}`)
+    }
+  
+    const start = (currentPage - 1) * itemsPerPage
+    const end = start + itemsPerPage - 1
+  
+    const { data, error, count } = await query.range(start, end)
+  
+    if (error) {
+      console.error("Error fetching PDFs:", error)
+    } else {
+      setPdfs(data as PdfFile[])
+      setTotalCount(count || 0)
+    }
+    setLoading(false)
+  }, [courseFilter, levelFilter, searchTerm, currentPage])
+  
+  useEffect(() => {
+    fetchPdfs()
+  }, [fetchPdfs])
+  
 
   useEffect(() => {
     const subscription = supabase
@@ -49,39 +85,23 @@ export default function PdfList() {
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, [fetchPdfs])
 
-  async function fetchPdfs() {
-    setLoading(true)
-    let query = supabase
-      .from("pdf_files")
-      .select("*", { count: "exact" })
-      .eq("status", "approved")
-      .order("created_at", { ascending: false })
-
-    if (courseFilter) {
-      query = query.eq("course", courseFilter)
+  
+  useEffect(() => {
+    const subscription = supabase
+      .channel("pdf_files_changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "pdf_files" }, (payload) => {
+        console.log("Change received!", payload)
+        fetchPdfs()
+      })
+      .subscribe()
+  
+    return () => {
+      subscription.unsubscribe()
     }
-    if (levelFilter) {
-      query = query.eq("level", levelFilter)
-    }
-    if (searchTerm) {
-      query = query.or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,tags.cs.{${searchTerm}}`)
-    }
+  }, [fetchPdfs])
 
-    const start = (currentPage - 1) * itemsPerPage
-    const end = start + itemsPerPage - 1
-
-    const { data, error, count } = await query.range(start, end)
-
-    if (error) {
-      console.error("Error fetching PDFs:", error)
-    } else {
-      setPdfs(data as PdfFile[])
-      setTotalCount(count || 0)
-    }
-    setLoading(false)
-  }
 
   const handleDownload = async (pdf: PdfFile) => {
     try {

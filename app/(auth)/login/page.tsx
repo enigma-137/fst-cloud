@@ -16,17 +16,22 @@ export default function Login() {
   const supabase = createClient()
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-
+    e.preventDefault();
+    setError(null);
+  
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) throw error
-      router.push("/dashboard")
-    } catch (error: any) {
-      setError(error.message || "An error occurred during login")
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      router.push("/dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     }
-  }
+  };
+  
 
   return (
     <div className="flex justify-center items-center min-h-screen">

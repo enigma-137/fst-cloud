@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { createClient } from "@/lib/supabase"
 import PdfUpload from "@/components/PdfUpload"
 import PdfList from "@/components/PdfList"
@@ -12,41 +12,34 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
-  useEffect(() => {
-    checkAdminStatus()
-  }, [])
-
-  async function checkAdminStatus() {
+  const checkAdminStatus = useCallback(async () => {
     const {
       data: { user },
     } = await supabase.auth.getUser()
-  
+
     if (!user) {
       console.log("No user found")
       setLoading(false)
       return
     }
-  
+
     console.log("User ID:", user.id) // Debugging user ID
-  
+
     const { data, error } = await supabase
       .from("admin_users")
       .select("*")
       .eq("user_id", user.id)
       .maybeSingle() // Prevents crash if no result
-  
+
     console.log("Admin check result:", data, error)
-  
-    if (data) {
-      setIsAdmin(true)
-    } else {
-      setIsAdmin(false)
-    }
-  
+
+    setIsAdmin(!!data)
     setLoading(false)
-  }
-  
-  
+  }, [supabase])
+
+  useEffect(() => {
+    checkAdminStatus()
+  }, [checkAdminStatus])
 
   if (loading) return <div className="min-h-screen flex justify-center items-center">Loading...</div>
 
@@ -71,4 +64,3 @@ export default function Dashboard() {
     </div>
   )
 }
-

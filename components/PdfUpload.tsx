@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { CloudUploadIcon } from "lucide-react";
+import { User } from "@supabase/supabase-js";
 
 export default function PdfUpload() {
   const [file, setFile] = useState<File | null>(null);
@@ -18,7 +19,7 @@ export default function PdfUpload() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
@@ -30,7 +31,7 @@ export default function PdfUpload() {
       setUser(user);
     };
     getUser();
-  }, [supabase.auth.getUser]);
+  }, [supabase.auth]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -74,8 +75,12 @@ export default function PdfUpload() {
       setSuccess(true);
       setTimeout(() => router.push("/dashboard"), 5000);
       
-    } catch (error: any) {
-      setError(error.message || "Error uploading file");
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setUploading(false);
     }

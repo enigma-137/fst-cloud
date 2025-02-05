@@ -23,8 +23,12 @@ export default function Signup() {
       const { error } = await supabase.auth.signUp({ email, password })
       if (error) throw error
       setIsSuccess(true)
-    } catch (error: any) {
-      setError(error.message || "An error occurred during signup")
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     }
   }
 
@@ -38,12 +42,12 @@ export default function Signup() {
             </div>
             <h2 className="mt-6 text-3xl font-bold text-gray-900">Check your email</h2>
             <p className="mt-2 text-sm text-gray-600">
-              We've sent a verification link to
+              We&apos;ve sent a verification link to
             </p>
             <p className="mt-1 text-lg font-medium text-blue-600">{email}</p>
             <div className="mt-8 space-y-4">
               <p className="text-sm text-gray-500">
-                Click the link in the email to verify your account. If you don't see the email, check your spam folder.
+                Click the link in the email to verify your account. If you don&apos;t see the email, check your spam folder.
               </p>
               <Button
                 variant="outline"
