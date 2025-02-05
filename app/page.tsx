@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter () 
+  
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
   
