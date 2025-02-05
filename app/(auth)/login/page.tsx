@@ -35,7 +35,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <form onSubmit={handleLogin} className="space-y-4 w-full max-w-md">
+      <form onSubmit={handleLogin} className="space-y-4 w-full max-w-md p-4">
         <h1 className="text-2xl font-bold text-center">Login</h1>
         {error && (
           <Alert variant="destructive">

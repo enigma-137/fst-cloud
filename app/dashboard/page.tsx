@@ -44,10 +44,10 @@ export default function Dashboard() {
   if (loading) return <div className="min-h-screen flex justify-center items-center">Loading...</div>
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Dashboard</h1>
+    <div className="p-8">
+  
       {isAdmin && (
-        <div className="mb-4">
+        <div className="mt-8">
           <Link href="/admin/approve">
             <Button>Go to Approval Page</Button>
           </Link>
@@ -58,7 +58,7 @@ export default function Dashboard() {
         <PdfUpload />
       </div>
       <div>
-        <h2 className="text-xl font-semibold mb-2">Approved PDFs</h2>
+        <h2 className="text-xl font-semibold mb-2"></h2>
         <PdfList />
       </div>
     </div>
