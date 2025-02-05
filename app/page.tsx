@@ -1,12 +1,15 @@
-import Link from "next/link";
+'use client'
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ArrowRight, BookOpen, Download, Upload, UserPlus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter () 
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Hero Section */}
+  
       <div className="container mx-auto px-6 pt-16 pb-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="text-center md:text-left md:w-1/2">
@@ -18,25 +21,27 @@ export default function Home() {
               with fellow students in a seamless, organized way.
             </p>
             <div className="flex gap-4 justify-center md:justify-start">
-              <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
+              <Button onClick={()=> router.push("/login")} className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
+              
                 Login
-              </button>
-              <button className="px-8 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg font-semibold transition-colors">
+              </Button>
+              <Button onClick={()=> router.push("/signup")} variant="outline" className="px-8 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg font-semibold transition-colors">
                 Sign Up
-              </button>
+              </Button>
             </div>
           </div>
           <div className="md:w-1/2">
-            <img
-              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
+            <Image
+              src="/upload-pdfs.jpg"
               alt="Students collaborating"
+              width={800}
+              height={600}
               className="rounded-lg shadow-2xl"
             />
           </div>
         </div>
       </div>
 
-      {/* How It Works Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">
@@ -44,7 +49,7 @@ export default function Home() {
           </h2>
           
           <div className="grid md:grid-cols-3 gap-12">
-            {/* Step 1: Sign Up */}
+          
             <div className="flex flex-col items-center text-center group">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
                 <UserPlus className="w-8 h-8 text-blue-600" />
@@ -55,7 +60,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Step 2: Upload */}
             <div className="flex flex-col items-center text-center group">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
                 <Upload className="w-8 h-8 text-blue-600" />
@@ -66,7 +70,7 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Step 3: Download */}
+       
             <div className="flex flex-col items-center text-center group">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
                 <Download className="w-8 h-8 text-blue-600" />
