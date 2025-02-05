@@ -47,7 +47,7 @@ export default function Dashboard() {
   return (
 <div className="container mx-auto px-4 py-8 max-w-4xl">
       {isAdmin && (
-        <div className="flex justify-center md:justify-start mb-6">
+        <div className="flex md:justify-start mb-6">
           <Link href="/admin/approve">
             <Button className="w-full md:w-auto">Admin <User className="ml-2 h-3 w-3 inline"/></Button>
           </Link>
