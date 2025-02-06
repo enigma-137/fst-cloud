@@ -188,7 +188,7 @@ export default function PdfList() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Calendar className="h-4 w-4" />
-                    <span>Created {new Date(pdf.created_at).toLocaleDateString()}</span>
+                    <span>Added: {new Date(pdf.created_at).toLocaleDateString()}</span>
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
