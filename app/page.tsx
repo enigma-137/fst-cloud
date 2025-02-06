@@ -11,14 +11,14 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
   
-      <div className="container mx-auto px-6 pt-16 pb-8">
+      <div className="container mx-auto px-6 pt-28 pb-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="text-center md:text-left md:w-1/2">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-blue-900">
               FST Cloud
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Your central hub for academic resources. Share and access study materials
+              Your central hub for the department&apos;s academic resources. Share and access study materials
               with fellow students in a seamless, organized way.
             </p>
             <div className="flex gap-4 justify-center md:justify-start">
@@ -33,7 +33,7 @@ export default function Home() {
           </div>
           <div className="md:w-1/2">
             <Image
-              src="/upload-pdfs.jpg"
+              src="/hero.png"
               alt="Students collaborating"
               width={800}
               height={600}
