@@ -144,9 +144,9 @@ export default function PdfList() {
                     <Badge key={tag} variant="secondary">
                       {tag}
                     </Badge>
-                  )) || "No tags"}
+                  )) || " "}
                 </div>
-                <Badge variant={pdf.status === "approved" ? "default" : "secondary"}>{pdf.status}</Badge>
+                {/* <Badge variant={pdf.status === "approved" ? "default" : "secondary"}>{pdf.status}</Badge> */}
               </CardContent>
               <CardFooter>
                 <Link href={`/pdf/${pdf.id}`}>
