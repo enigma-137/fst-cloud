@@ -91,7 +91,7 @@ export default function PdfList() {
 
   return (
     <div className="space-y-4">
-      <div className="flex space-x-4">
+           <div>
         <Input
           type="text"
           placeholder="Search PDFs..."
@@ -99,6 +99,8 @@ export default function PdfList() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full"
         />
+        </div>
+      <div className="flex space-x-4">  
         <Select onValueChange={(value) => setCourseFilter(value === "all" ? null : value)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by Course" />
