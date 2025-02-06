@@ -6,7 +6,7 @@ import PdfUpload from "@/components/PdfUpload"
 import PdfList from "@/components/PdfList"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { User } from "lucide-react"
+import { Loader2Icon, User } from "lucide-react"
 
 export default function Dashboard() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -42,10 +42,10 @@ export default function Dashboard() {
     checkAdminStatus()
   }, [checkAdminStatus])
 
-  if (loading) return <div className="min-h-screen flex justify-center items-center">Loading...</div>
+  if (loading) return <div className="min-h-screen flex justify-center items-center"><h1>Loading <Loader2Icon className="ml-2 h-4 w-4 inline animate-spin"/></h1></div>
 
   return (
-<div className="container mx-auto px-4 py-8 max-w-4xl">
+<div className="container mx-auto px-5 py-8 max-w-7xl">
       {isAdmin && (
         <div className="md:justify-start mb-6">
           <Link href="/admin/approve">
@@ -61,7 +61,7 @@ export default function Dashboard() {
 
         
         <div className="bg-white rounded-lg p-6">
-          <h2 className="text-lg md:text-xl font-semibold mb-4">PDF List</h2>
+          <h2 className="text-lg md:text-xl font-semibold mb-4">Available PDFs</h2>
           <PdfList />
         </div>
       </div>
