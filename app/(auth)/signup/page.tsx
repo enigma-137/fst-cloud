@@ -72,7 +72,19 @@ export default function Signup() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
     <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
-      {/* Left Side - Form Section */}
+      
+      {/* Image Section (Visible on all screens) */}
+      <div className="w-full lg:w-1/2">
+        <Image
+          src="/sign-up.jpg"
+          alt="Welcome to FST Cloud"
+          className="w-full h-60 lg:h-full object-cover"
+          height={740}
+          width={740}
+        />
+      </div>
+  
+      {/* Form Section */}
       <div className="w-full lg:w-1/2 p-8">
         <h1 className="text-2xl font-bold text-center text-gray-900">Create your account</h1>
         <p className="mt-2 text-center text-sm text-gray-600">Join us to access all features</p>
@@ -115,24 +127,16 @@ export default function Signup() {
             Sign Up
           </Button>
         </form>
- 
+  
+        {/* Login Link */}
         <div className="pt-4 flex flex-row gap-2 justify-between text-sm">
           <p className="text-gray-600 pt-3">Already have an account?</p>
           <Button variant="outline" onClick={() => router.push("/login")}>Log In</Button>
         </div>
       </div>
-  
-      <div className="hidden lg:block w-1/2">
-        <Image
-          src="/sign-up.jpg"
-          alt="Welcome to FST Cloud"
-          className="w-full h-full object-cover"
-          height={740}
-          width={740}
-        />
-      </div>
     </div>
   </div>
+  
   
   )
 }
