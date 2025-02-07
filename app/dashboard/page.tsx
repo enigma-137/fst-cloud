@@ -6,7 +6,7 @@ import PdfUpload from "@/components/PdfUpload"
 import PdfList from "@/components/PdfList"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Loader2Icon, User } from "lucide-react"
+import { BookOpenTextIcon, Loader2Icon, User } from "lucide-react"
 
 export default function Dashboard() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -61,7 +61,7 @@ export default function Dashboard() {
 
         
         <div className="bg-white rounded-lg p-6">
-          <h2 className="text-lg md:text-xl font-semibold mb-4">Available Documents</h2>
+          <h2 className="text-lg md:text-xl font-semibold mb-4">Available Documents <BookOpenTextIcon className="ml-2 h-5 w-5 inline"/></h2>
           <PdfList />
         </div>
       </div>
