@@ -61,7 +61,7 @@ export default function Dashboard() {
 
         
         <div className="bg-white rounded-lg p-6">
-          <h2 className="text-lg md:text-xl font-semibold mb-4">Available PDFs</h2>
+          <h2 className="text-lg md:text-xl font-semibold mb-4">Available Documents</h2>
           <PdfList />
         </div>
       </div>

@@ -130,7 +130,7 @@ export default function PdfList() {
   const totalPages = Math.ceil(totalCount / itemsPerPage)
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-6">
+    <div className="container mx-auto px-1 py-4 space-y-6">
       <div className="flex flex-col md:flex-row gap-4">
         <Input
           type="text"
