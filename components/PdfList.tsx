@@ -64,7 +64,7 @@ export default function PdfList() {
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, [fetchPdfs, supabase])
 
   async function fetchPdfs() {
     setLoading(true)

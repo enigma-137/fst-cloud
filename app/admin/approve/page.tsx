@@ -37,6 +37,7 @@ export default function AdminApprove() {
       router.push("/dashboard")
     } else {
       setIsAdmin(true)
+      setError(null)
     }
     setLoading(false)
   }, [supabase, router])
