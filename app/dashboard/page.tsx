@@ -49,7 +49,7 @@ export default function Dashboard() {
       {isAdmin && (
         <div className="md:justify-start mb-6">
           <Link href="/admin/approve">
-            <Button className="w-full md:w-auto">Admin <User className="ml-2 h-3 w-3 inline"/></Button>
+            <Button className="w-1/4 md:w-auto">Admin <User className="ml-2 h-3 w-3 inline"/></Button>
           </Link>
         </div>
       )}
