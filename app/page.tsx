@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { ArrowRight, BookOpen, Download, Upload, UserPlus } from "lucide-react";
+import { ArrowRight, BookOpen, Cloud,  Download, Upload, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -14,19 +14,19 @@ export default function Home() {
       <div className="container mx-auto px-6 pt-28 pb-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="text-center md:text-left md:w-1/2">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-blue-900">
-              FST Cloud
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-green-900">
+              FST Cl<Cloud className="h-12 w-12 inline" />ud 
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Your central hub for the department&apos;s academic resources. Share and access study materials
+              A centrl hub for the department of Food Science and Technology &apos;s academic resources. Share and access study materials
               with fellow students in a seamless, organized way.
             </p>
             <div className="flex gap-4 justify-center md:justify-start">
-              <Button onClick={()=> router.push("/login")} className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
+              <Button onClick={()=> router.push("/login")} className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors">
               
                 Login
               </Button>
-              <Button onClick={()=> router.push("/signup")} variant="outline" className="px-8 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg font-semibold transition-colors">
+              <Button onClick={()=> router.push("/signup")} variant="outline" className="px-8 py-3 border-2 border-green-600 text-green-600 hover:bg-blue-50 rounded-lg font-semibold transition-colors">
                 Sign Up
               </Button>
             </div>
@@ -37,7 +37,7 @@ export default function Home() {
               alt="Students collaborating"
               width={800}
               height={600}
-              className="rounded-lg shadow-2xl"
+              className="rounded-lg "
             />
           </div>
         </div>
@@ -53,7 +53,7 @@ export default function Home() {
           
             <div className="flex flex-col items-center text-center group">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-                <UserPlus className="w-8 h-8 text-blue-600" />
+                <UserPlus className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold mb-4">1. Create Account</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -63,7 +63,7 @@ export default function Home() {
 
             <div className="flex flex-col items-center text-center group">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-                <Upload className="w-8 h-8 text-blue-600" />
+                <Upload className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold mb-4">2. Share Resources</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -74,7 +74,7 @@ export default function Home() {
        
             <div className="flex flex-col items-center text-center group">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-                <Download className="w-8 h-8 text-blue-600" />
+                <Download className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold mb-4">3. Access Materials</h3>
               <p className="text-gray-600 leading-relaxed">

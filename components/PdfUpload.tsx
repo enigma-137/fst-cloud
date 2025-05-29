@@ -14,7 +14,7 @@ import { toast } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function PdfUpload() {
-  const [file, setFile] = useState<File | null>(null)
+  const [files, setFiles] = useState<File[]>([])
   const [course, setCourse] = useState("")
   const [level, setLevel] = useState("")
   const [description, setDescription] = useState("")
@@ -37,12 +37,18 @@ export default function PdfUpload() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFile(e.target.files[0])
+      const selectedFiles = Array.from(e.target.files).slice(0, 3)
+      setFiles(selectedFiles)
+      if (e.target.files.length > 3) {
+        setError("You can only upload up to 3 files at a time.")
+      } else {
+        setError(null)
+      }
     }
   }
 
   const resetForm = () => {
-    setFile(null)
+    setFiles([])
     setCourse("")
     setLevel("")
     setDescription("")
@@ -58,8 +64,12 @@ export default function PdfUpload() {
       setError("You must be logged in to upload files")
       return
     }
-    if (!file || !course || !level) {
-      setError("Please fill in all required fields")
+    if (files.length === 0 || !course || !level) {
+      setError("Please fill in all required fields and select at least one file")
+      return
+    }
+    if (files.length > 3) {
+      setError("You can only upload up to 3 files at a time.")
       return
     }
 
@@ -67,36 +77,38 @@ export default function PdfUpload() {
     setError(null)
 
     try {
-      const fileExt = file.name.split(".").pop()
-      const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
-
-      const { error: uploadError } = await supabase.storage.from("pdfs").upload(filePath, file)
-      if (uploadError) throw uploadError
-
       // Convert tags string to array and remove empty strings
       const tagsArray = tags
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0)
 
-      const { error: insertError } = await supabase.from("pdf_files").insert({
-        name: file.name,
-        path: filePath,
-        course: course,
-        level: level,
-        status: "pending",
-        user_id: user.id,
-        description: description || null, // Use null if description is empty
-        tags: tagsArray.length > 0 ? tagsArray : null, // Use null if no tags
-      })
-      if (insertError) throw insertError
+      for (const file of files) {
+        const fileExt = file.name.split(".").pop()
+        const fileName = `${Math.random()}.${fileExt}`
+        const filePath = `${fileName}`
+
+        const { error: uploadError } = await supabase.storage.from("pdfs").upload(filePath, file)
+        if (uploadError) throw uploadError
+
+        const { error: insertError } = await supabase.from("pdf_files").insert({
+          name: file.name,
+          path: filePath,
+          course: course,
+          level: level,
+          status: "pending",
+          user_id: user.id,
+          description: description || null, // Use null if description is empty
+          tags: tagsArray.length > 0 ? tagsArray : null, // Use null if no tags
+        })
+        if (insertError) throw insertError
+      }
 
       // Close the modal
       setIsOpen(false)
 
       // Show success toast
-      toast.success("PDF Uploaded Successfully", {
+      toast.success("PDF(s) Uploaded Successfully", {
         description: (
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-green-600">
@@ -104,7 +116,7 @@ export default function PdfUpload() {
               <span className="font-medium">Upload Complete!</span>
             </div>
             <p className="text-gray-600">
-              Your PDF is now under review. Once approved, it will appear on the dashboard.
+              Your PDF(s) are now under review. Once approved, they will appear on the dashboard.
             </p>
           </div>
         ),
@@ -138,16 +150,27 @@ export default function PdfUpload() {
             <DialogTitle>Upload a PDF</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleUpload} className="space-y-4">
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-2 text-xs text-yellow-800 rounded">
+              <strong>Note:</strong> All selected files will be uploaded with the same course, level, description, and tags. Please only select files that belong to the same course and level.
+            </div>
             <div>
-              <Label htmlFor="pdf-upload">Select PDF</Label>
+              <Label htmlFor="pdf-upload">Select PDF(s) (max 3)</Label>
               <Input
                 id="pdf-upload"
                 type="file"
                 accept=".pdf"
                 onChange={handleFileChange}
+                multiple
                 disabled={uploading}
                 className="cursor-pointer"
               />
+              {files.length > 0 && (
+                <ul className="text-xs mt-1 text-gray-600 list-disc list-inside">
+                  {files.map((f, i) => (
+                    <li key={i}>{f.name}</li>
+                  ))}
+                </ul>
+              )}
             </div>
             <div>
               <Label htmlFor="course">Course</Label>
@@ -203,7 +226,7 @@ export default function PdfUpload() {
               <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={uploading}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={!file || uploading}>
+              <Button type="submit" disabled={files.length === 0 || uploading}>
                 {uploading ? "Uploading..." : "Upload PDF"}
               </Button>
             </div>
