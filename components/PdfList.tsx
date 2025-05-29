@@ -7,11 +7,12 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Download, Loader2Icon, BookOpen, Calendar, Tag, FileQuestion } from "lucide-react"
+import { Download, Loader2Icon,  Calendar, Tag,  FolderOpen } from "lucide-react"
 import { toast } from "sonner"
 import { AuthModal } from "./AuthModal"
-import QuizSelector from "./QuizSelector"
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+// import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import FavoriteButton from "./FavoriteButton"
+import type { User } from "@supabase/supabase-js"
 
 interface PdfFile {
   id: string
@@ -50,9 +51,18 @@ export default function PdfList() {
   const [itemsPerPage] = useState(9)
   const [totalCount, setTotalCount] = useState(0)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-  const [isQuizModalOpen, setIsQuizModalOpen] = useState(false)
-  const [selectedPdf, setSelectedPdf] = useState<PdfFile | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+
+  // const [selectedPdf, setSelectedPdf] = useState<PdfFile | null>(null)
   const supabase = createClient()
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+    }
+    getUser()
+  }, [supabase.auth])
 
   useEffect(() => {
     fetchPdfs()
@@ -151,99 +161,106 @@ export default function PdfList() {
     }
   }
 
-  const handleTakeQuiz = async (pdf: PdfFile) => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
+//  const fileColor = "text-blue-600"n
+  // const handleTakeQuiz = async (pdf: PdfFile) => {
+  //   const {
+  //     data: { session },
+  //   } = await supabase.auth.getSession()
 
-    if (!session) {
-      setIsAuthModalOpen(true)
-      return
-    }
+  //   if (!session) {
+  //     setIsAuthModalOpen(true)
+  //     return
+  //   }
 
-    setSelectedPdf(pdf)
-    setIsQuizModalOpen(true)
-  }
+  //   setSelectedPdf(pdf)
+  //   setIsQuizModalOpen(true)
+  // }
 
   return (
-    <div className="container mx-auto px-2 py-8 space-y-6">
-      <div className="flex space-x-4">
+    <div className="container mx-auto px-1 py-4 space-y-4">
+      {/* Responsive filter/search bar */}
+      <div className="flex flex-col gap-2 md:flex-row md:space-x-2 md:gap-0">
         <Input
           type="text"
           placeholder="Search PDFs..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full"
+          className="w-full text-sm px-2 py-1"
         />
-        <Select onValueChange={(value) => setCourseFilter(value === "all" ? null : value)}>
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Filter by Course" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Courses</SelectItem>
-            {courses.map((course) => (
-              <SelectItem key={course} value={course}>
-                {course}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select onValueChange={(value) => setLevelFilter(value === "all" ? null : value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by Level" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Levels</SelectItem>
-            {levels.map((level) => (
-              <SelectItem key={level} value={level}>
-                {level}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col gap-2 w-full md:flex-row md:gap-0 md:w-auto">
+          <Select onValueChange={(value) => setCourseFilter(value === "all" ? null : value)}>
+            <SelectTrigger className="w-full md:w-[120px] text-xs px-2 py-1">
+              <SelectValue placeholder="Course" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              {courses.map((course) => (
+                <SelectItem key={course} value={course} className="text-xs">
+                  {course}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select onValueChange={(value) => setLevelFilter(value === "all" ? null : value)}>
+            <SelectTrigger className="w-full md:w-[100px] text-xs px-2 py-1">
+              <SelectValue placeholder="Level" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              {levels.map((level) => (
+                <SelectItem key={level} value={level} className="text-xs">
+                  {level}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       {loading ? (
-        <div className="min-h-[400px] flex justify-center items-center">
+        <div className="min-h-[200px] flex justify-center items-center">
           <div className="flex items-center gap-2 text-gray-500">
-            <Loader2Icon className="h-5 w-5 animate-spin" />
-            <span>Loading PDFs...</span>
+            <Loader2Icon className="h-4 w-4 animate-spin" />
+            <span className="text-xs">Loading PDFs...</span>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {pdfs.map((pdf) => (
-            <Card key={pdf.id} className="flex flex-col hover:shadow-lg transition-shadow duration-200">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold line-clamp-1 flex items-center gap-2">
-                  <BookOpen className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                  {pdf.name}
+            <Card key={pdf.id} className="flex flex-col hover:shadow-md transition-shadow duration-200 rounded-lg p-2">
+              <CardHeader className="pb-2 px-2">
+                <CardTitle className="text-xs font-semibold line-clamp-1 flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    <FolderOpen fill="green" fillOpacity="0.8" className="h-7 w-7 text-green-700 flex-shrink-0" />
+                    <span className="text-xs font-semibold line-clamp-1">{pdf.name}</span>
+                  </div>
+                  {user && <FavoriteButton pdfId={pdf.id} userId={user.id} />}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex-1 pb-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Calendar className="h-4 w-4" />
+              <CardContent className="flex-1 pb-2 px-2">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1 text-xs text-gray-600">
+                    <Calendar className="h-3 w-3" />
                     <span>Added: {new Date(pdf.created_at).toLocaleDateString()}</span>
                   </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="bg-blue-50">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-1">
+                      <Badge variant="outline" className="bg-blue-50 text-xs px-2 py-0.5">
                         Course: {pdf.course}
                       </Badge>
-                      <Badge variant="outline" className="bg-purple-50">
+                      <Badge variant="outline" className="bg-purple-50 text-xs px-2 py-0.5">
                         Level {pdf.level}
                       </Badge>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 line-clamp-2">{pdf.description}</p>
+                  <p className="text-xs text-gray-600 line-clamp-2">{pdf.description}</p>
                   {pdf.tags && pdf.tags.length > 0 && (
-                    <div className="flex items-start gap-2">
-                      <Tag className="h-4 w-4 text-gray-400 mt-1" />
-                      <div className="flex flex-wrap gap-1">
+                    <div className="flex items-start gap-1">
+                      <Tag className="h-3 w-3 text-gray-400 mt-0.5" />
+                      <div className="flex flex-wrap gap-0.5">
                         {pdf.tags.map((tag) => (
                           <span
                             key={tag}
-                            className={`px-2 py-0.5 rounded-full text-xs font-medium ${getTagColor(tag)}`}
+                            className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getTagColor(tag)}`}
                           >
                             {tag}
                           </span>
@@ -253,42 +270,33 @@ export default function PdfList() {
                   )}
                 </div>
               </CardContent>
-              <CardFooter className="pt-3 border-t flex flex-col gap-2">
-                <Button onClick={() => handleDownload(pdf)} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download PDF
-                </Button>
-                <Button onClick={() => handleTakeQuiz(pdf)} className="w-full" variant="outline">
-                  <FileQuestion className="h-4 w-4 mr-2" />
-                  Take a Quiz
+              <CardFooter className="pt-2 border-t flex flex-col gap-1 px-2">
+                <Button onClick={() => handleDownload(pdf)} className="w-full bg-green-600 hover:bg-green-700 text-white text-xs py-1 h-8 min-h-0">
+                  <Download className="h-3 w-3 mr-1" />
+                  Download
                 </Button>
               </CardFooter>
             </Card>
           ))}
         </div>
       )}
-      {pdfs.length === 0 && <p className="text-center mt-4">No PDFs found.</p>}
-      <div className="flex justify-center space-x-2 mt-4">
-        <Button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1}>
+      {pdfs.length === 0 && <p className="text-center mt-2 text-xs">No PDFs found.</p>}
+      <div className="flex justify-center space-x-2 mt-2">
+        <Button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1} className="text-xs px-3 py-1 h-8 min-h-0">
           Previous
         </Button>
-        <span>
+        <span className="text-xs self-center">
           Page {currentPage} of {totalPages}
         </span>
         <Button
           onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
           disabled={currentPage === totalPages}
+          className="text-xs px-3 py-1 h-8 min-h-0"
         >
           Next
         </Button>
       </div>
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
-      <Dialog open={isQuizModalOpen} onOpenChange={setIsQuizModalOpen}>
-        <DialogTitle>Take a Quiz</DialogTitle>
-        <DialogContent className="sm:max-w-md">
-          <QuizSelector selectedPdf={selectedPdf} onClose={() => setIsQuizModalOpen(false)} />
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

@@ -43,13 +43,13 @@ export default function Signup() {
         <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
           <div className="text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-              <Mail className="h-6 w-6 text-blue-600" />
+              <Mail className="h-6 w-6 text-green-600" />
             </div>
             <h2 className="mt-6 text-3xl font-bold text-gray-900">Check your email</h2>
             <p className="mt-2 text-sm text-gray-600">
               We&apos;ve sent a verification link to
             </p>
-            <p className="mt-1 text-lg font-medium text-blue-600">{email}</p>
+            <p className="mt-1 text-lg font-medium text-green-600">{email}</p>
             <Image src="/comfirm.jpg" alt="confirm" height={740} width={740} className="h-80 w-80" />
             <div className="mt-8 space-y-4">
               <p className="text-sm text-gray-500">
