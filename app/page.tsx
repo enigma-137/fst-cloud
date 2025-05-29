@@ -18,7 +18,7 @@ export default function Home() {
               FST Cl<Cloud className="h-12 w-12 inline" />ud 
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              A centrl hub for the department of Food Science and Technology &apos;s academic resources. Share and access study materials
+              A central hub for the department of Food Science and Technology &apos;s academic resources. Share and access study materials
               with fellow students in a seamless, organized way.
             </p>
             <div className="flex gap-4 justify-center md:justify-start">
