@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import Image from "next/image"
 import FavoriteButton from "@/components/FavoriteButton"
 import type { User } from "@supabase/supabase-js"
+import { useRouter } from "next/navigation"
 
 interface PdfFile {
   id: string
@@ -27,6 +28,7 @@ export default function FavoritesPage() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<User | null>(null)
   const supabase = createClient()
+  const router = useRouter()
 
   useEffect(() => {
     const getUserAndFavorites = async () => {
@@ -117,6 +119,12 @@ export default function FavoritesPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* <div className="flex justify-between items-center mb-6">
+     
+        <Button onClick={() => router.back()} className="bg-green-600 hover:bg-green-700 text-white">
+          Back
+        </Button>
+        </div> */}
       <h1 className="text-2xl font-bold mb-6">My Favorite PDFs</h1>
       
       {favoritePdfs.length === 0 ? (

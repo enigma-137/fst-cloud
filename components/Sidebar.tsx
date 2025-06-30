@@ -128,7 +128,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
            </> )}
           </div>
           {/* Notification Bell */}
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             className="relative ml-2"
@@ -141,7 +141,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
                 {unreadCount}
               </span>
             )}
-          </Button>
+          </Button> */}
         </div>
 
         {/* Notification Center Modal */}
