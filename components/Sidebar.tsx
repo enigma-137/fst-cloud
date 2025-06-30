@@ -10,7 +10,7 @@ import {
   LogOut,
   Home,
   ChevronLeft,
-  ChevronRight,
+  Menu as MenuIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -24,12 +24,12 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isAdmin }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [notifOpen, setNotifOpen] = useState(false)
   const pathname = usePathname()
   const supabase = createClient()
-  const { notifications} = useNotification()
+  const { notifications } = useNotification()
 
   useEffect(() => {
     const getUser = async () => {
@@ -81,66 +81,63 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
     // },
   ]
 
+  // Responsive: show overlay on mobile or when isOpen is true
+  // Show static sidebar on desktop (md: block)
   return (
-    <div
-      className={cn(
-        "relative min-h-screen bg-white border-r transition-all duration-300",
-        isCollapsed ? "w-5" : "w-64"
-      )}
-    >
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute -right-4 top-6 z-50 bg-white border rounded-full shadow-md"
-        onClick={() => setIsCollapsed(!isCollapsed)}
-      >
-        {isCollapsed ? (
-          <ChevronRight className="h-4 w-4" />
-        ) : (
-          <ChevronLeft className="h-4 w-4" />
-        )}
-      </Button>
+    <>
+      {/* Topbar for mobile with menu button */}
+      <div className="md:hidden flex items-center h-14 px-2 bg-white border-b sticky top-0 z-40">
+        <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
+          <MenuIcon className="h-6 w-6" />
+        </Button>
+      </div>
 
-      <div className="flex flex-col h-full">
-        {/* User Profile Section */}
-        <div className="p-4 border-b flex items-center justify-between">
+      {/* Backdrop for overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Sidebar overlay on mobile, static on desktop */}
+      <aside
+        className={cn(
+          "bg-white border-r min-h-screen flex flex-col transition-all duration-300",
+          isOpen ? "w-64 fixed left-0 top-0 h-full z-50" : "hidden",
+          "md:relative md:flex md:w-64 md:z-0"
+        )}
+        style={{ boxShadow: isOpen ? "0 0 0 9999px rgba(0,0,0,0.01)" : undefined }}
+      >
+        {/* Close button for overlay */}
+        <div className="flex flex-col gap-2 p-4 border-b">
           <div className="flex items-center gap-3">
-           
-            {!isCollapsed && (
-              <>
-               <Avatar>
+            <Avatar>
               <AvatarImage src={user?.user_metadata?.avatar_url} />
               <AvatarFallback>
                 {user?.email?.charAt(0).toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">
-                  {user?.user_metadata?.full_name ||
-                    (user?.email
-                      ? user.email.split("@")[0].charAt(0).toUpperCase() + user.email.split("@")[0].slice(1)
-                      : "")
-                  }
-                </p>
-                <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
-              </div>
-           </> )}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">
+                {user?.user_metadata?.full_name ||
+                  (user?.email
+                    ? user.email.split("@")[0].charAt(0).toUpperCase() + user.email.split("@")[0].slice(1)
+                    : "")
+                }
+              </p>
+              <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsOpen(false)}
+              aria-label="Close sidebar"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
           </div>
-          {/* Notification Bell */}
-          {/* <Button
-            variant="ghost"
-            size="icon"
-            className="relative ml-2"
-            onClick={() => { setNotifOpen(true); markAllAsRead(); }}
-            aria-label="Notifications"
-          >
-            <Bell className="h-5 w-5 ml-8" />
-            {unreadCount > 0 && (
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1 py-0.5 text-[10px] font-bold leading-none text-white bg-red-600 rounded-full">
-                {unreadCount}
-              </span>
-            )}
-          </Button> */}
         </div>
 
         {/* Notification Center Modal */}
@@ -165,7 +162,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
         </Dialog>
 
         {/* Navigation Items */}
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 flex flex-col">
           {navItems.map((item) => {
             const isActive = pathname === item.href
             return (
@@ -173,14 +170,15 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-1 py-2 rounded-lg transition-colors",
+                  "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors w-full",
                   isActive
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-gray-100"
                 )}
+                onClick={() => setIsOpen(false)}
               >
                 <item.icon className="h-5 w-5" />
-                {!isCollapsed && <span>{item.title}</span>}
+                <span>{item.title}</span>
               </Link>
             )
           })}
@@ -194,10 +192,10 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
             onClick={handleSignOut}
           >
             <LogOut className="h-5 w-5" />
-            {!isCollapsed && <span>Sign Out</span>}
+            <span>Sign Out</span>
           </Button>
         </div>
-      </div>
-    </div>
+      </aside>
+    </>
   )
 } 
