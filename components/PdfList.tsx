@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Download, Loader2Icon,  Calendar, Tag,  FolderOpen } from "lucide-react"
+import { Download, Loader2Icon, Calendar, Tag, FolderOpen } from "lucide-react"
 import { toast } from "sonner"
 import { AuthModal } from "./AuthModal"
 // import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
@@ -161,7 +161,7 @@ export default function PdfList() {
     }
   }
 
-//  const fileColor = "text-blue-600"n
+//  const fileColor = "text-blue-600"
   // const handleTakeQuiz = async (pdf: PdfFile) => {
   //   const {
   //     data: { session },

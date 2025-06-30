@@ -86,7 +86,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
     <div
       className={cn(
         "relative min-h-screen bg-white border-r transition-all duration-300",
-        isCollapsed ? "w-14" : "w-64"
+        isCollapsed ? "w-5" : "w-64"
       )}
     >
       <Button
@@ -106,13 +106,15 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
         {/* User Profile Section */}
         <div className="p-4 border-b flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Avatar>
+           
+            {!isCollapsed && (
+              <>
+               <Avatar>
               <AvatarImage src={user?.user_metadata?.avatar_url} />
               <AvatarFallback>
                 {user?.email?.charAt(0).toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
-            {!isCollapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">
                   {user?.user_metadata?.full_name ||
@@ -123,7 +125,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
                 </p>
                 <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
               </div>
-            )}
+           </> )}
           </div>
           {/* Notification Bell */}
           <Button
@@ -133,7 +135,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
             onClick={() => { setNotifOpen(true); markAllAsRead(); }}
             aria-label="Notifications"
           >
-            <Bell className="h-5 w-5" />
+            <Bell className="h-5 w-5 ml-8" />
             {unreadCount > 0 && (
               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1 py-0.5 text-[10px] font-bold leading-none text-white bg-red-600 rounded-full">
                 {unreadCount}
