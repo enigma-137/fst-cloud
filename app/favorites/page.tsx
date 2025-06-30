@@ -9,7 +9,7 @@ import { toast } from "sonner"
 import Image from "next/image"
 import FavoriteButton from "@/components/FavoriteButton"
 import type { User } from "@supabase/supabase-js"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
 
 interface PdfFile {
   id: string
@@ -28,7 +28,7 @@ export default function FavoritesPage() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<User | null>(null)
   const supabase = createClient()
-  const router = useRouter()
+  // const router = useRouter()
 
   useEffect(() => {
     const getUserAndFavorites = async () => {
