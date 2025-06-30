@@ -11,7 +11,6 @@ import {
   Home,
   ChevronLeft,
   ChevronRight,
-  Bell,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -30,7 +29,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
   const [notifOpen, setNotifOpen] = useState(false)
   const pathname = usePathname()
   const supabase = createClient()
-  const { notifications, unreadCount, markAllAsRead } = useNotification()
+  const { notifications} = useNotification()
 
   useEffect(() => {
     const getUser = async () => {
