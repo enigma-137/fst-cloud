@@ -180,6 +180,7 @@ export default function PdfList() {
       }
     } catch (err) {
       toast.error("Could not open PDF.")
+      console.error("Error opening PDF:", err)
     }
   }
 
