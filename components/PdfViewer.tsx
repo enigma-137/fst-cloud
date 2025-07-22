@@ -50,7 +50,7 @@
 //         >
 //           <Page
 //             pageNumber={pageNumber}
-//             width={Math.min(window.innerWidth - 32, 1000)}
+//             width={Math.min(typeof window !== "undefined" ? window.innerWidth - 32 : 1000, 1000)}
 //             renderTextLayer={false}
 //             renderAnnotationLayer={false}
 //           />

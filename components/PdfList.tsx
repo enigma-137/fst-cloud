@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Download, Loader2Icon, Calendar, Tag, FolderOpen } from "lucide-react"
+import { Download, Loader2Icon, Calendar, Tag, FolderOpen, BookOpen } from "lucide-react"
 import { toast } from "sonner"
 import { AuthModal } from "./AuthModal"
 // import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
@@ -161,6 +161,28 @@ export default function PdfList() {
     }
   }
 
+  const handleView = async (pdf: PdfFile) => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+
+    if (!session) {
+      setIsAuthModalOpen(true)
+      return
+    }
+    try {
+      const { data, error } = await supabase.storage.from("pdfs").createSignedUrl(pdf.path, 3600)
+      if (error) throw error
+      if (data?.signedUrl) {
+        window.open(data.signedUrl, "_blank")
+      } else {
+        toast.error("Could not get PDF link.")
+      }
+    } catch (err) {
+      toast.error("Could not open PDF.")
+    }
+  }
+
 //  const fileColor = "text-blue-600"
   // const handleTakeQuiz = async (pdf: PdfFile) => {
   //   const {
@@ -270,18 +292,28 @@ export default function PdfList() {
                   )}
                 </div>
               </CardContent>
-              <CardFooter className="pt-2 border-t flex flex-col gap-1 px-2">
-                <Button onClick={() => handleDownload(pdf)} className="w-full bg-green-600 hover:bg-green-700 text-white text-xs py-1 h-8 min-h-0">
+              <CardFooter className="pt-2 border-t flex flex-row justify-between gap-1 px-2">
+
+                  <Button
+                 
+                  onClick={() => handleView(pdf)}
+                  className=" text-xs py-1 h-8 min-h-0 mt-1 bg-green-600 hover:bg-green-700 text-white"
+                >
+                  View
+                  <BookOpen className="h-3 w-3 inline ml-1"/>
+                </Button>
+                <Button onClick={() => handleDownload(pdf)}  variant="outline" className="  text-xs py-1 h-8 min-h-0">
                   <Download className="h-3 w-3 mr-1" />
                   Download
                 </Button>
+              
               </CardFooter>
             </Card>
           ))}
         </div>
       )}
-      {pdfs.length === 0 && <p className="text-center mt-2 text-xs">No PDFs found.</p>}
-      <div className="flex justify-center space-x-2 mt-2">
+      {pdfs.length === 0 || !loading  && <p className="text-center mt-8 text-xs">No PDFs found.</p>}
+      <div className={`flex justify-center space-x-2 mt-2 ${pdfs.length === 0 || loading ? "hidden" : "block"}`}>
         <Button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1} className="text-xs px-3 py-1 h-8 min-h-0">
           Previous
         </Button>

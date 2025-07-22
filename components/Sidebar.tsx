@@ -86,7 +86,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
   return (
     <>
       {/* Topbar for mobile with menu button */}
-      <div className="md:hidden flex items-center h-14 px-2 bg-white border-b sticky top-0 z-40">
+      <div className="md:hidden flex items-center h-14 px-1 bg-white border-b sticky top-0 z-40">
         <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
           <MenuIcon className="h-6 w-6" />
         </Button>
