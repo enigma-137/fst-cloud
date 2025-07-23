@@ -43,7 +43,6 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
     await supabase.auth.signOut()
     window.location.href = "/login"
   }
-
   const navItems = [
     {
       title: "Dashboard",

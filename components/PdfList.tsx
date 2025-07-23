@@ -200,9 +200,9 @@ export default function PdfList() {
   // }
 
   return (
-    <div className="container mx-auto px-1 py-4 space-y-4">
-      {/* Responsive filter/search bar */}
-      <div className="flex flex-col gap-2 md:flex-row md:space-x-2 md:gap-0">
+    <div className="h-full flex flex-col">
+      {/* Sticky filter/search bar */}
+      <div className="sticky top-0 z-10 bg-white shadow-sm flex flex-col gap-2 md:flex-row md:space-x-2 md:gap-0 p-2">
         <Input
           type="text"
           placeholder="Search PDFs..."
@@ -239,97 +239,100 @@ export default function PdfList() {
           </Select>
         </div>
       </div>
-      {loading ? (
-        <div className="min-h-[200px] flex justify-center items-center">
-          <div className="flex items-center gap-2 text-gray-500">
-            <Loader2Icon className="h-4 w-4 animate-spin" />
-            <span className="text-xs">Loading PDFs...</span>
+      {/* Scrollable PDF list */}
+      <div className="flex-1 overflow-y-auto px-1 pb-4 space-y-4">
+        {loading ? (
+          <div className="min-h-[200px] flex justify-center items-center">
+            <div className="flex items-center gap-2 text-gray-500">
+              <Loader2Icon className="h-4 w-4 animate-spin" />
+              <span className="text-xs">Loading PDFs...</span>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {pdfs.map((pdf) => (
-            <Card key={pdf.id} className="flex flex-col hover:shadow-md transition-shadow duration-200 rounded-lg p-2">
-              <CardHeader className="pb-2 px-2">
-                <CardTitle className="text-xs font-semibold line-clamp-1 flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <FolderOpen fill="green" fillOpacity="0.8" className="h-7 w-7 text-green-700 flex-shrink-0" />
-                    <span className="text-xs font-semibold line-clamp-1">{pdf.name}</span>
-                  </div>
-                  {user && <FavoriteButton pdfId={pdf.id} userId={user.id} />}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1 pb-2 px-2">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-gray-600">
-                    <Calendar className="h-3 w-3" />
-                    <span>Added: {new Date(pdf.created_at).toLocaleDateString()}</span>
-                  </div>
-                  <div className="space-y-0.5">
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 ">
+            {pdfs.map((pdf) => (
+              <Card key={pdf.id} className="flex flex-col hover:shadow-md transition-shadow duration-200 rounded-lg p-2">
+                <CardHeader className="pb-2 px-2">
+                  <CardTitle className="text-xs font-semibold line-clamp-1 flex items-center justify-between">
                     <div className="flex items-center gap-1">
-                      <Badge variant="outline" className="bg-blue-50 text-xs px-2 py-0.5">
-                        Course: {pdf.course}
-                      </Badge>
-                      <Badge variant="outline" className="bg-purple-50 text-xs px-2 py-0.5">
-                        Level {pdf.level}
-                      </Badge>
+                      <FolderOpen fill="green" fillOpacity="0.8" className="h-7 w-7 text-green-700 flex-shrink-0" />
+                      <span className="text-xs font-semibold line-clamp-1">{pdf.name}</span>
                     </div>
-                  </div>
-                  <p className="text-xs text-gray-600 line-clamp-2">{pdf.description}</p>
-                  {pdf.tags && pdf.tags.length > 0 && (
-                    <div className="flex items-start gap-1">
-                      <Tag className="h-3 w-3 text-gray-400 mt-0.5" />
-                      <div className="flex flex-wrap gap-0.5">
-                        {pdf.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getTagColor(tag)}`}
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                    {user && <FavoriteButton pdfId={pdf.id} userId={user.id} />}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 pb-2 px-2">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1 text-xs text-gray-600">
+                      <Calendar className="h-3 w-3" />
+                      <span>Added: {new Date(pdf.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1">
+                        <Badge variant="outline" className="bg-blue-50 text-xs px-2 py-0.5">
+                          Course: {pdf.course}
+                        </Badge>
+                        <Badge variant="outline" className="bg-purple-50 text-xs px-2 py-0.5">
+                          Level {pdf.level}
+                        </Badge>
                       </div>
                     </div>
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter className="pt-2 border-t flex flex-row justify-between gap-1 px-2">
+                    <p className="text-xs text-gray-600 line-clamp-2">{pdf.description}</p>
+                    {pdf.tags && pdf.tags.length > 0 && (
+                      <div className="flex items-start gap-1">
+                        <Tag className="h-3 w-3 text-gray-400 mt-0.5" />
+                        <div className="flex flex-wrap gap-0.5">
+                          {pdf.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getTagColor(tag)}`}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-2 border-t flex flex-row justify-between gap-1 px-2">
 
-                  <Button
-                 
-                  onClick={() => handleView(pdf)}
-                  className=" text-xs py-1 h-8 min-h-0 mt-1 bg-green-600 hover:bg-green-700 text-white"
-                >
-                  View
-                  <BookOpen className="h-3 w-3 inline ml-1"/>
-                </Button>
-                <Button onClick={() => handleDownload(pdf)}  variant="outline" className="  text-xs py-1 h-8 min-h-0">
-                  <Download className="h-3 w-3 mr-1" />
-                  Download
-                </Button>
-              
-              </CardFooter>
-            </Card>
-          ))}
+                    <Button
+                   
+                    onClick={() => handleView(pdf)}
+                    className=" text-xs py-1 h-8 min-h-0 mt-1 bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    View
+                    <BookOpen className="h-3 w-3 inline ml-1"/>
+                  </Button>
+                  <Button onClick={() => handleDownload(pdf)}  variant="outline" className="  text-xs py-1 h-8 min-h-0">
+                    <Download className="h-3 w-3 mr-1" />
+                    Download
+                  </Button>
+                
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
+        {!loading && pdfs.length === 0 && <p className="text-center mt-8 text-xs">No PDFs found.</p>}
+        <div className="flex justify-center space-x-2 mt-2">
+          <Button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1} className="text-xs px-3 py-1 h-8 min-h-0">
+            Previous
+          </Button>
+          <span className="text-xs self-center">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="text-xs px-3 py-1 h-8 min-h-0"
+          >
+            Next
+          </Button>
         </div>
-      )}
-      {pdfs.length === 0 || !loading  && <p className="text-center mt-8 text-xs">No PDFs found.</p>}
-      <div className={`flex justify-center space-x-2 mt-2 ${pdfs.length === 0 || loading ? "hidden" : "block"}`}>
-        <Button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1} className="text-xs px-3 py-1 h-8 min-h-0">
-          Previous
-        </Button>
-        <span className="text-xs self-center">
-          Page {currentPage} of {totalPages}
-        </span>
-        <Button
-          onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className="text-xs px-3 py-1 h-8 min-h-0"
-        >
-          Next
-        </Button>
+        <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       </div>
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </div>
   )
 }

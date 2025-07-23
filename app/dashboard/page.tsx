@@ -6,16 +6,17 @@ import { BookOpenTextIcon } from "lucide-react"
 
 export default function Dashboard() {
   return (
-    <div className="container mx-auto px-1  py-8 max-w-7xl">
-      <div className="space-y-8">
-        <div>
-          <PdfUpload />
-        </div>
-
-        <div className="bg-white rounded-lg p-1">
-          <h2 className="text-lg md:text-xl font-semibold mb-4">
+    <div className="flex flex-col h-full">
+      <div className="p-4">
+        <PdfUpload />
+      </div>
+      <div className="flex flex-col flex-1 h-0 bg-white rounded-lg">
+        <div className="flex items-center px-4 py-2 border-b">
+          <h2 className="text-lg md:text-xl font-semibold">
             Available Documents <BookOpenTextIcon className="ml-2 h-5 w-5 inline"/>
           </h2>
+        </div>
+        <div className="flex-1 min-h-0">
           <PdfList />
         </div>
       </div>

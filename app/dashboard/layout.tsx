@@ -45,9 +45,13 @@ export default function DashboardLayout({
 
   return (
     <NotificationProvider user={user} isAdmin={isAdmin}>
-      <div className="flex min-h-screen">
-        <Sidebar isAdmin={isAdmin} />
-        <main className="flex-1 overflow-auto">
+      <div className="flex h-screen w-screen overflow-hidden">
+        {/* Fixed Sidebar */}
+        <div className="fixed left-0 top-0 h-screen z-50">
+          <Sidebar isAdmin={isAdmin} />
+        </div>
+        {/* Main Content (scrollable) */}
+        <main className="flex-1 flex flex-col h-screen ml-0 md:ml-64 overflow-hidden">
           {children}
         </main>
       </div>
