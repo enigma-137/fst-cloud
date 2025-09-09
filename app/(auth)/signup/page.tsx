@@ -10,19 +10,65 @@ import { Mail } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 
+// List of common disposable email domains to block
+const disposableDomains = [
+  "mailinator.com",
+  "tempmail.com",
+  "10minutemail.com",
+  "guerrillamail.com",
+  "sharklasers.com",
+  "throwawaymail.com",
+  "temp-mail.org",
+  "yopmail.com",
+  "dispostable.com",
+  "maildrop.cc",
+]
+
+// Strict email regex (RFC 5322 compliant, simplified for usability)
+const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+
 export default function Signup() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [validationError, setValidationError] = useState<string | null>(null)
   const [isSuccess, setIsSuccess] = useState(false)
   const supabase = createClient()
-
-
   const router = useRouter()
+
+  // Email validation function
+  const validateEmail = (email: string): string | null => {
+    if (!email) {
+      return "Email is required"
+    }
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address"
+    }
+    const domain = email.split("@")[1]?.toLowerCase()
+    if (domain && disposableDomains.includes(domain)) {
+      return "Temporary or disposable email addresses are not allowed"
+    }
+    return null
+  }
+
+  // Handle email input change for real-time validation
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value
+    setEmail(newEmail)
+    setValidationError(validateEmail(newEmail))
+  }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setValidationError(null)
+
+    // Validate email before submitting
+    const emailError = validateEmail(email)
+    if (emailError) {
+      setValidationError(emailError)
+      return
+    }
 
     try {
       const { error } = await supabase.auth.signUp({ email, password })
@@ -30,9 +76,9 @@ export default function Signup() {
       setIsSuccess(true)
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
+        setError(error.message)
       } else {
-        setError("An unexpected error occurred");
+        setError("An unexpected error occurred")
       }
     }
   }
@@ -71,72 +117,72 @@ export default function Signup() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
-    <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
-      
-      {/* Image Section (Visible on all screens) */}
-      <div className="w-full lg:w-1/2">
-        <Image
-          src="/sign-up.jpg"
-          alt="Welcome to FST Cloud"
-          className="w-full h-60 lg:h-full object-cover"
-          height={740}
-          width={740}
-        />
-      </div>
+      <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
+        {/* Image Section (Visible on all screens) */}
+        <div className="w-full lg:w-1/2">
+          <Image
+            src="/sign-up.jpg"
+            alt="Welcome to FST Cloud"
+            className="w-full h-60 lg:h-full object-cover"
+            height={740}
+            width={740}
+          />
+        </div>
   
-      {/* Form Section */}
-      <div className="w-full lg:w-1/2 p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-900">Create your account</h1>
-        <p className="mt-2 text-center text-sm text-gray-600">Join us to access all features</p>
+        {/* Form Section */}
+        <div className="w-full lg:w-1/2 p-8">
+          <h1 className="text-2xl font-bold text-center text-gray-900">Create your account</h1>
+          <p className="mt-2 text-center text-sm text-gray-600">Join us to access all features</p>
   
-        <form onSubmit={handleSignup} className="space-y-6 mt-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          <div className="space-y-1">
-            <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-              Email address
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full"
-              placeholder="Enter your email"
-              required
-            />
+          <form onSubmit={handleSignup} className="space-y-6 mt-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <div className="space-y-1">
+              <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                Email address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                className={`w-full ${validationError ? "border-red-500" : ""}`}
+                placeholder="Enter your email"
+                required
+              />
+              {validationError && (
+                <p className="text-sm text-red-500">{validationError}</p>
+              )}
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                Password
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full"
+                placeholder="Create a password"
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={!!validationError}>
+              Sign Up
+            </Button>
+          </form>
+  
+          {/* Login Link */}
+          <div className="pt-4 flex flex-row gap-2 justify-between text-sm">
+            <p className="text-gray-600 pt-3">Already have an account?</p>
+            <Button variant="outline" onClick={() => router.push("/login")}>Log In</Button>
           </div>
-          <div className="space-y-1">
-            <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-              Password
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full"
-              placeholder="Create a password"
-              required
-            />
-          </div>
-          <Button type="submit" className="w-full">
-            Sign Up
-          </Button>
-        </form>
-  
-        {/* Login Link */}
-        <div className="pt-4 flex flex-row gap-2 justify-between text-sm">
-          <p className="text-gray-600 pt-3">Already have an account?</p>
-          <Button variant="outline" onClick={() => router.push("/login")}>Log In</Button>
         </div>
       </div>
     </div>
-  </div>
-  
-  
   )
 }
