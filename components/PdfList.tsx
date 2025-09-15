@@ -48,7 +48,7 @@ export default function PdfList() {
   const [levelFilter, setLevelFilter] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage] = useState(9)
+  const [itemsPerPage] = useState(12)
   const [totalCount, setTotalCount] = useState(0)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
@@ -184,7 +184,7 @@ export default function PdfList() {
     }
   }
 
-//  const fileColor = "text-blue-600"
+  //  const fileColor = "text-blue-600"
   // const handleTakeQuiz = async (pdf: PdfFile) => {
   //   const {
   //     data: { session },
@@ -201,44 +201,47 @@ export default function PdfList() {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Sticky filter/search bar */}
-      <div className="sticky top-0 z-10 bg-white shadow-sm flex flex-col gap-2 md:flex-row md:space-x-2 md:gap-0 p-2">
-        <Input
-          type="text"
-          placeholder="Search PDFs..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full text-sm px-2 py-1"
-        />
-        <div className="flex flex-col gap-2 w-full md:flex-row md:gap-0 md:w-auto">
-          <Select onValueChange={(value) => setCourseFilter(value === "all" ? null : value)}>
-            <SelectTrigger className="w-full md:w-[120px] text-xs px-2 py-1">
-              <SelectValue placeholder="Course" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              {courses.map((course) => (
-                <SelectItem key={course} value={course} className="text-xs">
-                  {course}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select onValueChange={(value) => setLevelFilter(value === "all" ? null : value)}>
-            <SelectTrigger className="w-full md:w-[100px] text-xs px-2 py-1">
-              <SelectValue placeholder="Level" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              {levels.map((level) => (
-                <SelectItem key={level} value={level} className="text-xs">
-                  {level}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+     
+     <div className="sticky top-0 z-10 bg-white flex flex-col items-center md:flex-row md:justify-center gap-2 md:space-x-2 md:gap-0 p-2">
+  <Input
+    type="text"
+    placeholder="Search PDFs..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="w-3/4 md:w-2/4 text-sm py-1"
+  />
+</div>
+  <div className="flex flex-row gap-2 px-2 py-2 w-3/4 md:w-auto md:gap-2">
+    <Select onValueChange={(value) => setCourseFilter(value === "all" ? null : value)}>
+      <SelectTrigger className="w-1/2 md:w-[120px] text-xs px-2 py-1">
+        <SelectValue placeholder="Course" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">All</SelectItem>
+        {courses.map((course) => (
+          <SelectItem key={course} value={course} className="text-xs">
+            {course}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+
+    <Select onValueChange={(value) => setLevelFilter(value === "all" ? null : value)}>
+      <SelectTrigger className="w-1/2 md:w-[100px] text-xs px-2 py-1">
+        <SelectValue placeholder="Level" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">All</SelectItem>
+        {levels.map((level) => (
+          <SelectItem key={level} value={level} className="text-xs">
+            {level}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+
+
       {/* Scrollable PDF list */}
       <div className="flex-1 overflow-y-auto px-1 pb-4 space-y-4">
         {loading ? (
@@ -249,32 +252,29 @@ export default function PdfList() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 ">
+          <div className="grid grid-cols-2 p-2 sm:grid-cols-2 lg:grid-cols-4 gap-3  pb-8">
             {pdfs.map((pdf) => (
               <Card key={pdf.id} className="flex flex-col hover:shadow-md transition-shadow duration-200 rounded-lg p-2">
                 <CardHeader className="pb-2 px-2">
                   <CardTitle className="text-xs font-semibold line-clamp-1 flex items-center justify-between">
                     <div className="flex items-center gap-1">
-                      <FolderOpen fill="green" fillOpacity="0.8" className="h-7 w-7 text-green-700 flex-shrink-0" />
-                      <span className="text-xs font-semibold line-clamp-1">{pdf.name}</span>
+                      {/* <FolderOpen fill="green" fillOpacity="0.8" className="h-7 w-7 text-green-700 flex-shrink-0" /> */}
+                      <span className="text-sm font-semibold line-clamp-2">{pdf.name}</span>
                     </div>
                     {user && <FavoriteButton pdfId={pdf.id} userId={user.id} />}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1 pb-2 px-2">
+                <CardContent className="flex-1  px-2">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-xs text-gray-600">
-                      <Calendar className="h-3 w-3" />
-                      <span>Added: {new Date(pdf.created_at).toLocaleDateString()}</span>
-                    </div>
+                  
                     <div className="space-y-0.5">
-                      <div className="flex items-center gap-1">
-                        <Badge variant="outline" className="bg-blue-50 text-xs px-2 py-0.5">
+                      <div className="flex items-center text-[9px] gap-1">
+                        <p  className="bg-blue-50 text-[9px] py-0.5">
                           Course: {pdf.course}
-                        </Badge>
-                        <Badge variant="outline" className="bg-purple-50 text-xs px-2 py-0.5">
+                        </p>
+                        <p className="bg-purple-50 text-[9px] py-0.5">
                           Level {pdf.level}
-                        </Badge>
+                        </p>
                       </div>
                     </div>
                     <p className="text-xs text-gray-600 line-clamp-2">{pdf.description}</p>
@@ -293,31 +293,36 @@ export default function PdfList() {
                         </div>
                       </div>
                     )}
+
+                      <div className="flex items-center gap-1 text-xs text-gray-600">
+                      <Calendar className="h-3 w-3" />
+                      <span>Added: {new Date(pdf.created_at).toLocaleDateString()}</span>
+                    </div>
                   </div>
                 </CardContent>
                 <CardFooter className="pt-2 border-t flex flex-row justify-between gap-1 px-2">
 
-                    <Button
-                   
+                  <Button
+
                     onClick={() => handleView(pdf)}
                     className=" text-xs py-1 h-8 min-h-0 mt-1 bg-green-600 hover:bg-green-700 text-white"
                   >
-                    View
-                    <BookOpen className="h-3 w-3 inline ml-1"/>
+
+                    <BookOpen className="h-3 w-3 inline ml-1" />
                   </Button>
-                  <Button onClick={() => handleDownload(pdf)}  variant="outline" className="  text-xs py-1 h-8 min-h-0">
+                  <Button onClick={() => handleDownload(pdf)} variant="outline" className="  text-xs py-1 h-8 min-h-0">
                     <Download className="h-3 w-3 mr-1" />
-                    Download
+
                   </Button>
-                
+
                 </CardFooter>
               </Card>
             ))}
           </div>
         )}
-        {!loading && pdfs.length === 0 && <p className="text-center mt-8 text-xs">No PDFs found.</p>}
-        <div className="flex justify-center space-x-2 mt-2">
-          <Button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1} className="text-xs px-3 py-1 h-8 min-h-0">
+        {!loading && pdfs.length === 0 && <p className="text-center mt-16 text-xs">No PDFs found.</p>}
+        <div className={` ${loading ? 'hidden' : 'block'} justify-center space-x-2 mt-8 flex`}>
+          <Button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1} className={`text-xs px-3 py-1 h-8 min-h-0`}>
             Previous
           </Button>
           <span className="text-xs self-center">

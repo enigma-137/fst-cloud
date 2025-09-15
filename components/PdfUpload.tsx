@@ -138,102 +138,108 @@ export default function PdfUpload() {
   }
 
   return (
-    <div className="flex justify-end mb-4">
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button className="bg-primary hover:bg-primary/90">
-            Add a New PDF <CloudUploadIcon className="h-4 w-4 ml-2" />
+   <div className="fixed bottom-24 right-6 z-50">
+  <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <DialogTrigger asChild>
+      <Button className="bg-primary  hover:bg-primary/90 shadow-lg rounded-full px-5 py-3">
+        Add a New PDF <CloudUploadIcon className="h-4 w-4 ml-2" />
+      </Button>
+    </DialogTrigger>
+    <DialogContent className="max-w-md">
+      <DialogHeader>
+        <DialogTitle>Upload a PDF</DialogTitle>
+      </DialogHeader>
+      <form onSubmit={handleUpload} className="space-y-4">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-2 text-xs text-yellow-800 rounded">
+          <strong>Note:</strong> All selected files will be uploaded with the same course, level, description, and tags. Please only select files that belong to the same course and level.
+        </div>
+        <div>
+          <Label htmlFor="pdf-upload">Select PDF(s) (max 3)</Label>
+          <Input
+            id="pdf-upload"
+            type="file"
+            accept=".pdf"
+            onChange={handleFileChange}
+            multiple
+            disabled={uploading}
+            className="cursor-pointer"
+          />
+          {files.length > 0 && (
+            <ul className="text-xs mt-1 text-gray-600 list-disc list-inside">
+              {files.map((f, i) => (
+                <li key={i}>{f.name}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div>
+          <Label htmlFor="course">Course</Label>
+          <Input
+            id="course"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+            placeholder="Enter course name"
+            disabled={uploading}
+          />
+        </div>
+        <div>
+          <Label htmlFor="level">Level</Label>
+          <Select onValueChange={setLevel} disabled={uploading} value={level}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select level" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="100">100 Level</SelectItem>
+              <SelectItem value="200">200 Level</SelectItem>
+              <SelectItem value="300">300 Level</SelectItem>
+              <SelectItem value="400">400 Level</SelectItem>
+              <SelectItem value="500">500 Level</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="description">Description (Optional)</Label>
+          <Textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Enter a brief description of the PDF"
+            disabled={uploading}
+          />
+        </div>
+        <div>
+          <Label htmlFor="tags">Tags (Optional, comma-separated)</Label>
+          <Input
+            id="tags"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            placeholder="e.g., lecture, notes, assignment"
+            disabled={uploading}
+          />
+        </div>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        <div className="flex justify-end gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsOpen(false)}
+            disabled={uploading}
+          >
+            Cancel
           </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Upload a PDF</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleUpload} className="space-y-4">
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-2 text-xs text-yellow-800 rounded">
-              <strong>Note:</strong> All selected files will be uploaded with the same course, level, description, and tags. Please only select files that belong to the same course and level.
-            </div>
-            <div>
-              <Label htmlFor="pdf-upload">Select PDF(s) (max 3)</Label>
-              <Input
-                id="pdf-upload"
-                type="file"
-                accept=".pdf"
-                onChange={handleFileChange}
-                multiple
-                disabled={uploading}
-                className="cursor-pointer"
-              />
-              {files.length > 0 && (
-                <ul className="text-xs mt-1 text-gray-600 list-disc list-inside">
-                  {files.map((f, i) => (
-                    <li key={i}>{f.name}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="course">Course</Label>
-              <Input
-                id="course"
-                value={course}
-                onChange={(e) => setCourse(e.target.value)}
-                placeholder="Enter course name"
-                disabled={uploading}
-              />
-            </div>
-            <div>
-              <Label htmlFor="level">Level</Label>
-              <Select onValueChange={setLevel} disabled={uploading} value={level}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="100">100 Level</SelectItem>
-                  <SelectItem value="200">200 Level</SelectItem>
-                  <SelectItem value="300">300 Level</SelectItem>
-                  <SelectItem value="400">400 Level</SelectItem>
-                  <SelectItem value="500">500 Level</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="description">Description (Optional)</Label>
-              <Textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter a brief description of the PDF"
-                disabled={uploading}
-              />
-            </div>
-            <div>
-              <Label htmlFor="tags">Tags (Optional, comma-separated)</Label>
-              <Input
-                id="tags"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                placeholder="e.g., lecture, notes, assignment"
-                disabled={uploading}
-              />
-            </div>
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            <div className="flex justify-end gap-3">
-              <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={uploading}>
-                Cancel
-              </Button>
-              <Button type="submit" disabled={files.length === 0 || uploading}>
-                {uploading ? "Uploading..." : "Upload PDF"}
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </div>
+          <Button type="submit" disabled={files.length === 0 || uploading}>
+            {uploading ? "Uploading..." : "Upload PDF"}
+          </Button>
+        </div>
+      </form>
+    </DialogContent>
+  </Dialog>
+</div>
+
   )
 }
 
