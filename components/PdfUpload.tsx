@@ -138,11 +138,11 @@ export default function PdfUpload() {
   }
 
   return (
-   <div className="fixed bottom-24 right-6 z-50">
+   <div className="fixed bottom-24 md:bottom-36 right-6 z-50">
   <Dialog open={isOpen} onOpenChange={setIsOpen}>
     <DialogTrigger asChild>
-      <Button className="bg-primary  hover:bg-primary/90 shadow-lg rounded-full px-5 py-3">
-        Add a New PDF <CloudUploadIcon className="h-4 w-4 ml-2" />
+      <Button className="bg-primary hover:bg-primary/90 shadow-lg rounded-full px-5 py-3">
+        New PDF <CloudUploadIcon className="h-6 w-6 animate-bounce" />
       </Button>
     </DialogTrigger>
     <DialogContent className="max-w-md">

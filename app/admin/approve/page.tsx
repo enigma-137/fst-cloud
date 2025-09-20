@@ -48,7 +48,7 @@ export default function AdminApprove() {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center">
         <Image src="/access-denied.jpg" alt="No access" width={740} height={740} className="h-80 w-80" />
         <h1>
           Access Denied. Redirecting <Loader2Icon className="animate-spin inline ml-2 h-4 w-4" />
