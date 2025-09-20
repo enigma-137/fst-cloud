@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { ArrowRight, BookOpen, Cloud,  Download, Upload, UserPlus } from "lucide-react";
+import { Cloud } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
