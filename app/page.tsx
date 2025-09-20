@@ -9,9 +9,9 @@ export default function Home() {
   const router = useRouter () 
   
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <main className="min-h-screen  bg-gradient-to-b from-blue-50 to-white">
   
-      <div className="container mx-auto px-6 pt-28 pb-8">
+      <div className="container mx-auto px-6 pt-28 pb-24">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="text-center md:text-left md:w-1/2">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-green-900">
@@ -43,7 +43,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">
             How FST Cloud Works
@@ -83,10 +83,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      {/* <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">
             Why Choose FST Cloud?
@@ -118,11 +118,11 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
-      <footer className="bg-white py-8 border-t">
-        <div className="container mx-auto px-6 text-center text-gray-600">
+      <footer className="bg-white pt-24 pb-6 border-t">
+        <div className="container mx-auto px-6 text-center text-sm text-gray-600">
           <p>© {new Date().getFullYear()} FST Cloud. All rights reserved.</p>
         </div>
       </footer>
