@@ -12,7 +12,7 @@
 "display_override": "fullscreen",
 "protocol_handlers": [
     {
-        "source": "https://fst-cloud.vercel.app/",
+        "source": "https://fst-cloud.vercel.app/dashboard",
         "protocol": "https",
         "url": "https://fst-cloud.vercel.app/dashboard"
     }
