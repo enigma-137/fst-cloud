@@ -6,8 +6,8 @@
 "description": "Fst Cloud is a cloud storage solution that allows you to store and manage your files securely online.",
 "lang": " en-US",
 "dir": "auto",
-"theme_color": "#000000",
-"background_color": "#000000",
+ "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
 "orientation": "any",
 "display_override": "fullscreen",
 "protocol_handlers": [
