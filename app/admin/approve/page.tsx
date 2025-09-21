@@ -81,10 +81,10 @@ export default function AdminApprove() {
 
       <div className="flex justify-center space-x-4 mt-8 mb-4">
         <Button onClick={() => setShowApproved(false)} variant={showApproved ? "outline" : "default"}>
-          Pending PDFs
+          Pending Documents
         </Button>
         <Button onClick={() => setShowApproved(true)} variant={showApproved ? "default" : "outline"}>
-          Approved PDFs
+          Approved Documents
         </Button>
       </div>
 

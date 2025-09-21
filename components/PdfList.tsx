@@ -22,6 +22,7 @@ interface PdfFile {
   level: string
   status: "pending" | "approved" | "rejected"
   path: string
+  type: string
   description: string
   tags: string[]
 }
@@ -147,17 +148,17 @@ export default function PdfList() {
       const url = window.URL.createObjectURL(data)
       const a = document.createElement("a")
       a.href = url
-      a.download = pdf.name.endsWith(".pdf") ? pdf.name : `${pdf.name}.pdf`
+      a.download = pdf.name
       document.body.appendChild(a)
       a.click()
 
       window.URL.revokeObjectURL(url)
       document.body.removeChild(a)
 
-      toast.success("PDF downloaded successfully")
+      toast.success("Document downloaded successfully")
     } catch (error) {
       console.error("Error downloading file:", error)
-      toast.error("Failed to download PDF")
+      toast.error("Failed to download document")
     }
   }
 
@@ -176,10 +177,10 @@ export default function PdfList() {
       if (data?.signedUrl) {
         window.open(data.signedUrl, "_blank")
       } else {
-        toast.error("Could not get PDF link.")
+        toast.error("Could not get document link.")
       }
     } catch (err) {
-      toast.error("Could not open PDF.")
+      toast.error("Could not open document.")
       console.error("Error opening PDF:", err)
     }
   }
@@ -205,7 +206,7 @@ export default function PdfList() {
      <div className="sticky top-0 z-10 bg-white flex flex-col items-center md:flex-row md:justify-center gap-2 md:space-x-2 md:gap-0 p-2">
   <Input
     type="text"
-    placeholder="Search PDFs..."
+    placeholder="Search documents..."
     value={searchTerm}
     onChange={(e) => setSearchTerm(e.target.value)}
     className="w-3/4 md:w-2/4 text-sm py-1"
@@ -248,7 +249,7 @@ export default function PdfList() {
           <div className="min-h-[200px] flex justify-center items-center">
             <div className="flex items-center gap-2 text-gray-500">
               <Loader2Icon className="h-4 w-4 animate-spin" />
-              <span className="text-xs">Loading PDFs...</span>
+              <span className="text-xs">Loading documents...</span>
             </div>
           </div>
         ) : (
@@ -293,14 +294,14 @@ export default function PdfList() {
                         </div>
                       </div>
                     )}
-
+<p className="text-xs text-gray-600"> <span className="font-semibold">Type:</span> {pdf.type}</p>
                       <div className="flex items-center gap-1 text-xs text-gray-600">
                       <Calendar className="h-3 w-3" />
                       <span>Added: {new Date(pdf.created_at).toLocaleDateString()}</span>
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="pt-2 border-t flex flex-row justify-between gap-1 px-2">
+                <CardFooter className=" border-t flex flex-row justify-between gap-1 px-2">
 
                   <Button
 
@@ -320,7 +321,7 @@ export default function PdfList() {
             ))}
           </div>
         )}
-        {!loading && pdfs.length === 0 && <p className="text-center mt-16 text-xs">No PDFs found.</p>}
+        {!loading && pdfs.length === 0 && <p className="text-center mt-16 text-xs">No documents found.</p>}
         <div className={` ${loading ? 'hidden' : 'block'} justify-center space-x-2 mt-8 flex`}>
           <Button onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))} disabled={currentPage === 1} className={`text-xs px-3 py-1 h-8 min-h-0`}>
             Previous

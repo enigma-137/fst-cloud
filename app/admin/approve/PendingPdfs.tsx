@@ -17,6 +17,7 @@ interface PdfFile {
   description: string
   tags: string[]
   path: string
+  type: string
 }
 
 export default function PendingPdfs() {
@@ -33,7 +34,7 @@ export default function PendingPdfs() {
       .order("created_at", { ascending: false })
 
     if (error) {
-      console.error("Error fetching pending PDFs:", error)
+      console.error("Error fetching pending documents:", error)
     } else {
       setPendingPdfs(data as PdfFile[])
     }
@@ -66,12 +67,12 @@ export default function PendingPdfs() {
 
       await fetchPendingPdfs()
     } catch (error) {
-      console.error("Error updating PDF status:", error)
+      console.error("Error updating document status:", error)
     }
   }
 
   if (loading) {
-    return <div>Loading pending PDFs <Loader2Icon className="ml-2 h-4 w-4 inline animate-spin"/></div>
+    return <div>Loading pending documents <Loader2Icon className="ml-2 h-4 w-4 inline animate-spin"/></div>
   }
 
   return (
@@ -83,14 +84,15 @@ export default function PendingPdfs() {
             <CardHeader>
               <CardTitle>{pdf.name}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p>Course: {pdf.course}</p>
-              <p>Level: {pdf.level}</p>
-              <p>Description: {pdf.description}</p>
-              <p>Tags: {pdf.tags?.join(", ")}</p>
-              <p>Status: {pdf.status}</p>
+            <CardContent className="p-3 space-y-1 text-sm">
+              <p><span className="font-semibold">Course:</span> {pdf.course}</p>
+              <p><span className="font-semibold">Level:</span> {pdf.level}</p>
+              <p><span className="font-semibold">Description:</span> {pdf.description}</p>
+              <p><span className="font-semibold">Type:</span> {pdf.type}</p>
+              <p><span className="font-semibold">Tags:</span> {pdf.tags?.join(", ")}</p>
+              <p><span className="font-semibold">Status:</span> {pdf.status}</p>
             </CardContent>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex justify-between p-3">
               <Button onClick={() => handleApproval(pdf.id, true)} className="bg-green-500 hover:bg-green-700">
                 Approve
               </Button>
@@ -104,7 +106,7 @@ export default function PendingPdfs() {
       {pendingPdfs.length === 0 && (
         <div className="flex flex-col items-center justify-center">
           <Image src="/empty.jpg" alt="image empty" height={740} width={740} className="h-80 w-80" />
-          <p className="text-center mb-8">No pending PDFs to approve.</p>
+          <p className="text-center mb-8">No pending documents to approve.</p>
         </div>
       )}
     </div>

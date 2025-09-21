@@ -27,6 +27,7 @@ interface PdfFile {
   description: string
   tags: string[]
   path: string
+  type: string
 }
 
 export default function ApprovedPdfs() {
@@ -49,7 +50,7 @@ export default function ApprovedPdfs() {
       .order("created_at", { ascending: false })
 
     if (error) {
-      console.error("Error fetching approved PDFs:", error)
+      console.error("Error fetching approved documents:", error)
     } else {
       setApprovedPdfs(data as PdfFile[])
       setTotalPages(Math.ceil((count || 0) / itemsPerPage))
@@ -88,7 +89,7 @@ export default function ApprovedPdfs() {
 
       await fetchApprovedPdfs()
     } catch (error) {
-      console.error("Error deleting PDF:", error)
+      console.error("Error deleting document:", error)
     }
   }
 
@@ -96,12 +97,12 @@ export default function ApprovedPdfs() {
     return  <div className="flex flex-col items-center justify-center py-12">
               <Image
                 src="/empty.jpg" 
-                alt="No PDFs found" 
+                alt="No documents found"
                 height={300} 
                 width={300} 
                 className="mb-6 opacity-75"
               />
-              <p className="text-gray-500">No PDFs found matching your criteria.</p>
+              <p className="text-gray-500">No documents found matching your criteria.</p>
             </div>
   }
 
@@ -111,7 +112,7 @@ export default function ApprovedPdfs() {
       <div className="mb-4 flex items-center">
         <Input
           type="text"
-          placeholder="Search PDFs..."
+          placeholder="Search documents..."
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value)
@@ -138,9 +139,9 @@ export default function ApprovedPdfs() {
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Are you sure you want to delete this PDF?</DialogTitle>
+                      <DialogTitle>Are you sure you want to delete this document?</DialogTitle>
                       <DialogDescription>
-                        This action cannot be undone. This will permanently delete the PDF from the database.
+                        This action cannot be undone. This will permanently delete the document from the database.
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
@@ -155,7 +156,7 @@ export default function ApprovedPdfs() {
                 </Dialog>
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 space-y-1 text-sm">
               <p>Course: {pdf.course}</p>
               <p>Level: {pdf.level}</p>
               <p>Description: {pdf.description}</p>
@@ -167,12 +168,12 @@ export default function ApprovedPdfs() {
       {approvedPdfs.length === 0 &&  <div className="flex flex-col items-center justify-center py-12">
                 <Image 
                   src="/empty.jpg" 
-                  alt="No PDFs found" 
+                  alt="No documents found"
                   height={300} 
                   width={300} 
                   className="mb-6 opacity-75"
                 />
-                <p className="text-gray-500">No PDFs found matching your criteria.</p>
+                <p className="text-gray-500">No documents found matching your criteria.</p>
               </div>}
       <div className="flex justify-center mt-4 space-x-2">
         <Button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1}>

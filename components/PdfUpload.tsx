@@ -37,10 +37,13 @@ export default function PdfUpload() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files).slice(0, 3)
+      const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword']
+      const selectedFiles = Array.from(e.target.files).filter(file => allowedTypes.includes(file.type)).slice(0, 3)
       setFiles(selectedFiles)
       if (e.target.files.length > 3) {
         setError("You can only upload up to 3 files at a time.")
+      } else if (Array.from(e.target.files).some(file => !allowedTypes.includes(file.type))) {
+        setError("Only PDF, PPTX, DOCX, and DOC files are allowed.")
       } else {
         setError(null)
       }
@@ -84,7 +87,8 @@ export default function PdfUpload() {
         .filter((tag) => tag.length > 0)
 
       for (const file of files) {
-        const fileExt = file.name.split(".").pop()
+        const fileExt = file.name.split(".").pop()?.toLowerCase()
+        const fileType = fileExt === 'pdf' ? 'pdf' : fileExt === 'pptx' ? 'pptx' : fileExt === 'docx' ? 'docx' : fileExt === 'doc' ? 'doc' : 'unknown'
         const fileName = `${Math.random()}.${fileExt}`
         const filePath = `${fileName}`
 
@@ -98,6 +102,7 @@ export default function PdfUpload() {
           level: level,
           status: "pending",
           user_id: user.id,
+          type: fileType,
           description: description || null, // Use null if description is empty
           tags: tagsArray.length > 0 ? tagsArray : null, // Use null if no tags
         })
@@ -108,7 +113,7 @@ export default function PdfUpload() {
       setIsOpen(false)
 
       // Show success toast
-      toast.success("PDF(s) Uploaded Successfully", {
+      toast.success("Document(s) Uploaded Successfully", {
         description: (
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-green-600">
@@ -116,7 +121,7 @@ export default function PdfUpload() {
               <span className="font-medium">Upload Complete!</span>
             </div>
             <p className="text-gray-600">
-              Your PDF(s) are now under review. Once approved, they will appear on the dashboard.
+              Your document(s) are now under review. Once approved, they will appear on the dashboard.
             </p>
           </div>
         ),
@@ -142,23 +147,23 @@ export default function PdfUpload() {
   <Dialog open={isOpen} onOpenChange={setIsOpen}>
     <DialogTrigger asChild>
       <Button className="bg-purple-900 hover:bg-primary/90 shadow-lg rounded-full px-5 py-3">
-        New PDF <CloudUploadIcon className="h-6 w-6 animate-bounce" />
+        New Document <CloudUploadIcon className="h-6 w-6 animate-bounce" />
       </Button>
     </DialogTrigger>
     <DialogContent className="max-w-md">
       <DialogHeader>
-        <DialogTitle>Upload a PDF</DialogTitle>
+        <DialogTitle>Upload Documents</DialogTitle>
       </DialogHeader>
       <form onSubmit={handleUpload} className="space-y-4">
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-2 text-xs text-yellow-800 rounded">
-          <strong>Note:</strong> All selected files will be uploaded with the same course, level, description, and tags. Please only select files that belong to the same course and level.
+          <strong>Note:</strong> All selected files will be uploaded with the same course, level, description, and tags. Please only select files that belong to the same course and level. Supported formats: PDF, PPTX, DOCX, DOC.
         </div>
         <div>
-          <Label htmlFor="pdf-upload">Select PDF(s) (max 3)</Label>
+          <Label htmlFor="pdf-upload">Select Document(s) (max 3) - PDF, PPTX, DOCX, DOC</Label>
           <Input
             id="pdf-upload"
             type="file"
-            accept=".pdf"
+            accept=".pdf,.pptx,.docx,.doc"
             onChange={handleFileChange}
             multiple
             disabled={uploading}
@@ -232,7 +237,7 @@ export default function PdfUpload() {
             Cancel
           </Button>
           <Button type="submit" disabled={files.length === 0 || uploading}>
-            {uploading ? "Uploading..." : "Upload PDF"}
+            {uploading ? "Uploading..." : "Upload Document"}
           </Button>
         </div>
       </form>
