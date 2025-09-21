@@ -152,7 +152,7 @@ export default function FavoritesPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-1">
-                <div className="space-y-3">
+                <div className="space-y-3 p-3">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <span>Course: {pdf.course}</span>
                     <span>•</span>
@@ -175,7 +175,7 @@ export default function FavoritesPage() {
                   )}
                 </div>
               </CardContent>
-              <CardContent className="pt-0">
+              <CardContent className=" p-3">
                 <Button
                   onClick={() => handleDownload(pdf)}
                   className="w-full bg-green-600 hover:bg-green-700 text-white"
