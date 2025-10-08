@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -42,13 +43,16 @@ const getTagColor = (tag: string) => {
 }
 
 export default function PdfList() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
   const [pdfs, setPdfs] = useState<PdfFile[]>([])
   const [allPdfs, setAllPdfs] = useState<PdfFile[]>([])
   const [loading, setLoading] = useState(true)
-  const [courseFilter, setCourseFilter] = useState<string | null>(null)
-  const [levelFilter, setLevelFilter] = useState<string | null>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
+  const [courseFilter, setCourseFilter] = useState<string | null>(searchParams.get('course') || null)
+  const [levelFilter, setLevelFilter] = useState<string | null>(searchParams.get('level') || null)
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '')
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'))
   const [itemsPerPage] = useState(12)
   const [totalCount, setTotalCount] = useState(0)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
@@ -66,12 +70,28 @@ export default function PdfList() {
   }, [supabase.auth])
 
   useEffect(() => {
+    setSearchTerm(searchParams.get('search') || '')
+    setCourseFilter(searchParams.get('course') || null)
+    setLevelFilter(searchParams.get('level') || null)
+    setCurrentPage(parseInt(searchParams.get('page') || '1'))
+  }, [searchParams])
+
+  useEffect(() => {
     fetchPdfs()
   }, [currentPage, courseFilter, levelFilter, searchTerm])
 
   useEffect(() => {
     setCurrentPage(1)
   }, [courseFilter, levelFilter, searchTerm])
+
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (searchTerm) params.set('search', searchTerm)
+    if (courseFilter) params.set('course', courseFilter)
+    if (levelFilter) params.set('level', levelFilter)
+    if (currentPage > 1) params.set('page', currentPage.toString())
+    router.replace(`/dashboard?${params.toString()}`, { scroll: false })
+  }, [searchTerm, courseFilter, levelFilter, currentPage, router])
 
   useEffect(() => {
     const subscription = supabase
