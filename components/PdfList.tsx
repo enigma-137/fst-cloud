@@ -70,6 +70,10 @@ export default function PdfList() {
   }, [currentPage, courseFilter, levelFilter, searchTerm])
 
   useEffect(() => {
+    setCurrentPage(1)
+  }, [courseFilter, levelFilter, searchTerm])
+
+  useEffect(() => {
     const subscription = supabase
       .channel("pdf_files_changes")
       .on("postgres_changes", { event: "*", schema: "public", table: "pdf_files" }, (payload) => {
@@ -105,9 +109,10 @@ export default function PdfList() {
       if (searchTerm) {
         filteredPdfs = filteredPdfs.filter(
           (pdf) =>
-            pdf.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            pdf.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            pdf.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase())),
+            (pdf.name && pdf.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (pdf.description && pdf.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (pdf.course && pdf.course.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (pdf.tags && Array.isArray(pdf.tags) && pdf.tags.some((tag) => typeof tag === 'string' && tag.toLowerCase().includes(searchTerm.toLowerCase()))),
         )
       }
 
