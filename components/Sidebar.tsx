@@ -11,6 +11,7 @@ import {
   Home,
   ChevronLeft,
   Menu as MenuIcon,
+  Folder,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -59,6 +60,11 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
     //   href: "/dashboard",
     //   icon: Upload,
     // },
+    {
+      title: "Folders",
+      href: "/dashboard/folders",
+      icon: Folder,
+    },
     // {
     //   title: "Documents",
     //   href: "/dashboard",
