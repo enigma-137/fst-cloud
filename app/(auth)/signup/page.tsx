@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Mail, Eye, EyeOff } from "lucide-react"
+import { Mail, Eye, EyeOff, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 
@@ -34,6 +34,7 @@ export default function Signup() {
   const [validationError, setValidationError] = useState<string | null>(null)
   const [isSuccess, setIsSuccess] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
   const supabase = createClient()
   const router = useRouter()
 
@@ -63,6 +64,7 @@ export default function Signup() {
     e.preventDefault()
     setError(null)
     setValidationError(null)
+    setLoading(true)
 
     // Validate email before submitting
     const emailError = validateEmail(email)
@@ -82,6 +84,7 @@ export default function Signup() {
         setError("An unexpected error occurred")
       }
     }
+    setLoading(false)
   }
 
   if (isSuccess) {
@@ -185,7 +188,11 @@ export default function Signup() {
               </div>
             </div>
             <Button type="submit" className="w-full" disabled={!!validationError}>
-              Sign Up
+              {loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </form>
 
