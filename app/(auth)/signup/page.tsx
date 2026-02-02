@@ -10,7 +10,7 @@ import { Mail, Eye, EyeOff, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 
-// List of common disposable email domains to block
+
 const disposableDomains = [
   "mailinator.com",
   "tempmail.com",
@@ -38,7 +38,6 @@ export default function Signup() {
   const supabase = createClient()
   const router = useRouter()
 
-  // Email validation function
   const validateEmail = (email: string): string | null => {
     if (!email) {
       return "Email is required"
@@ -53,7 +52,6 @@ export default function Signup() {
     return null
   }
 
-  // Handle email input change for real-time validation
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value
     setEmail(newEmail)
@@ -66,7 +64,6 @@ export default function Signup() {
     setValidationError(null)
     setLoading(true)
 
-    // Validate email before submitting
     const emailError = validateEmail(email)
     if (emailError) {
       setValidationError(emailError)
@@ -122,7 +119,7 @@ export default function Signup() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
       <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
-        {/* Image Section (Visible on all screens) */}
+
         <div className="w-full lg:w-1/2">
           <Image
             src="/sign-up.jpg"
