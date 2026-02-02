@@ -78,10 +78,10 @@ export default function FolderExplorer() {
     // --- Virtual Folder Logic ---
 
     const rootFolders = [
-        { id: "level", name: "By Level", icon: Folder, color: "text-blue-500", bg: "bg-blue-50" },
-        { id: "course", name: "By Course", icon: Folder, color: "text-green-500", bg: "bg-green-50" },
-        { id: "type", name: "By Type", icon: Folder, color: "text-purple-500", bg: "bg-purple-50" },
-        { id: "year", name: "By Year", icon: Folder, color: "text-orange-500", bg: "bg-orange-50" },
+        { id: "level", name: "By Level", icon: Folder, color: "text-blue-500" },
+        { id: "course", name: "By Course", icon: Folder, color: "text-green-500" },
+        { id: "type", name: "By Type", icon: Folder, color: "text-purple-500" },
+        { id: "year", name: "By Year", icon: Folder, color: "text-orange-500" },
     ]
 
     // Helper to get content based on current path
@@ -286,7 +286,6 @@ export default function FolderExplorer() {
                                 name={Folder.name}
                                 icon={Folder.icon || Folder}
                                 color={Folder.color}
-                                bg={Folder.bg}
                                 onClick={() => handleNavigate(Folder.id)}
                             />
                         ))}
@@ -334,7 +333,7 @@ export default function FolderExplorer() {
 
 // --- Sub-components ---
 
-function FolderItem({ name, icon: Icon, onClick, color, bg, variant = "default" }: any) {
+function FolderItem({ name, icon: Icon, onClick, color, variant = "default" }: any) {
     return (
         <div
             onClick={onClick}
@@ -349,7 +348,6 @@ function FolderItem({ name, icon: Icon, onClick, color, bg, variant = "default" 
         >
             <div className={`
                 h-12 w-12 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110
-                ${bg || "bg-blue-50"}
             `}>
                 <Icon className={`h-6 w-6 ${color || "text-blue-500"}`} />
             </div>
@@ -365,7 +363,7 @@ function FileCard({ pdf, onView, onDownload, userId }: { pdf: PdfFile, onView: (
         <Card className="hover:shadow-md transition-shadow group relative">
             <CardContent className="p-4 flex flex-col h-full gap-3">
                 <div className="flex items-start justify-between gap-2">
-                    <div className="p-2 bg-red-50 rounded-lg">
+                    <div className="p-2  rounded-lg">
                         <FileText className="h-6 w-6 text-red-500" />
                     </div>
                     {userId && <FavoriteButton pdfId={pdf.id} userId={userId} />}
