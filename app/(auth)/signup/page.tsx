@@ -92,7 +92,7 @@ export default function Signup() {
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
         <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
           <div className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full">
               <Mail className="h-6 w-6 text-green-600" />
             </div>
             <h2 className="mt-6 text-3xl font-bold text-gray-900">Check your email</h2>
