@@ -49,7 +49,7 @@ export default function FolderExplorer() {
     useEffect(() => {
         fetchPdfs()
         getCurrentUser()
-    }, [])
+    })
 
     const getCurrentUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
@@ -74,8 +74,6 @@ export default function FolderExplorer() {
             setLoading(false)
         }
     }
-
-    // --- Virtual Folder Logic ---
 
     const rootFolders = [
         { id: "level", name: "By Level", icon: Folder, color: "text-blue-500" },
