@@ -10,7 +10,8 @@ import {
     ArrowLeft,
     Loader2,
     Download,
-    BookOpen
+    BookOpen,
+    type LucideIcon
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -35,6 +36,21 @@ interface PdfFile {
 }
 
 type GroupingType = "level" | "course" | "type" | "year"
+
+interface FolderData {
+    id: string
+    name: string
+    icon: LucideIcon
+    color?: string
+}
+
+interface FolderItemProps {
+    name: string
+    icon: LucideIcon
+    onClick: () => void
+    color?: string
+    variant?: "default" | "back"
+}
 
 export default function FolderExplorer() {
     const [pdfs, setPdfs] = useState<PdfFile[]>([])
@@ -278,13 +294,13 @@ export default function FolderExplorer() {
                             />
                         )}
 
-                        {(items as any[]).map((Folder: any) => (
+                        {(items as FolderData[]).map((folder) => (
                             <FolderItem
-                                key={Folder.id}
-                                name={Folder.name}
-                                icon={Folder.icon || Folder}
-                                color={Folder.color}
-                                onClick={() => handleNavigate(Folder.id)}
+                                key={folder.id}
+                                name={folder.name}
+                                icon={folder.icon}
+                                color={folder.color}
+                                onClick={() => handleNavigate(folder.id)}
                             />
                         ))}
                     </div>
@@ -331,7 +347,7 @@ export default function FolderExplorer() {
 
 // --- Sub-components ---
 
-function FolderItem({ name, icon: Icon, onClick, color, variant = "default" }: any) {
+function FolderItem({ name, icon: Icon, onClick, color, variant = "default" }: FolderItemProps) {
     return (
         <div
             onClick={onClick}
