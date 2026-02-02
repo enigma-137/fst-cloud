@@ -239,12 +239,12 @@ export default function FolderExplorer() {
     return (
         <div className="flex flex-col h-full space-y-4">
             {/* Header & Breadcrumbs */}
-            <div className="flex items-center gap-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
+            <div className="flex items-center gap-2  p-3 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setCurrentPath([])}
-                    className={currentPath.length === 0 ? "text-primary bg-primary/10" : "text-gray-500"}
+                    className={currentPath.length === 0 ? "text-primary " : "text-gray-500"}
                 >
                     <Home className="h-4 w-4" />
                 </Button>
