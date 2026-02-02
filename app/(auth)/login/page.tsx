@@ -102,7 +102,6 @@ export default function Login() {
             </Button>
           </form>
 
-          {/* Signup Link */}
           <div className="pt-4 flex flex-row gap-2 justify-between text-sm">
             <p className="text-gray-600 pt-3">Don&apos;t have an account?</p>
             <Button variant="outline" onClick={() => router.push("/signup")}>Create One</Button>

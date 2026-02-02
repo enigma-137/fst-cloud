@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Mail } from "lucide-react"
+import { Mail, Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 
@@ -33,6 +33,7 @@ export default function Signup() {
   const [error, setError] = useState<string | null>(null)
   const [validationError, setValidationError] = useState<string | null>(null)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const supabase = createClient()
   const router = useRouter()
 
@@ -128,12 +129,12 @@ export default function Signup() {
             width={740}
           />
         </div>
-  
-        {/* Form Section */}
+
+
         <div className="w-full lg:w-1/2 p-8">
           <h1 className="text-2xl font-bold text-center text-gray-900">Create your account</h1>
           <p className="mt-2 text-center text-sm text-gray-600">Join us to access all features</p>
-  
+
           <form onSubmit={handleSignup} className="space-y-6 mt-4">
             {error && (
               <Alert variant="destructive">
@@ -157,25 +158,37 @@ export default function Signup() {
                 <p className="text-sm text-red-500">{validationError}</p>
               )}
             </div>
-            <div className="space-y-1">
-              <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full"
-                placeholder="Create a password"
-                required
-              />
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  placeholder="Enter password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" aria-hidden="true" />
+                  ) : (
+                    <Eye className="h-5 w-5" aria-hidden="true" />
+                  )}
+                  <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
+                </button>
+              </div>
             </div>
             <Button type="submit" className="w-full" disabled={!!validationError}>
               Sign Up
             </Button>
           </form>
-  
+
           {/* Login Link */}
           <div className="pt-4 flex flex-row gap-2 justify-between text-sm">
             <p className="text-gray-600 pt-3">Already have an account?</p>
