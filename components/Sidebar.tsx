@@ -51,6 +51,11 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
       icon: Home,
     },
     {
+      title: "Folders",
+      href: "/dashboard/folders",
+      icon: Folder,
+    },
+    {
       title: "Favorites",
       href: "/favorites",
       icon: Star,
@@ -60,11 +65,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
     //   href: "/dashboard",
     //   icon: Upload,
     // },
-    {
-      title: "Folders",
-      href: "/dashboard/folders",
-      icon: Folder,
-    },
+
     // {
     //   title: "Documents",
     //   href: "/dashboard",
@@ -72,12 +73,12 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
     // },
     ...(isAdmin
       ? [
-          {
-            title: "Admin Panel",
-            href: "/admin/approve",
-            icon: UserIcon,
-          },
-        ]
+        {
+          title: "Admin Panel",
+          href: "/admin/approve",
+          icon: UserIcon,
+        },
+      ]
       : []),
     // {
     //   title: "Settings",
