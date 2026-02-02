@@ -43,7 +43,6 @@ export default function Login() {
     <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
       <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
 
-        {/* Image Section (Visible on all screens) */}
         <div className="w-full lg:w-1/2">
           <Image
             src="/loginn.jpg"
@@ -53,8 +52,6 @@ export default function Login() {
             width={740}
           />
         </div>
-
-        {/* Login Form Section */}
         <div className="w-full lg:w-1/2 p-8">
           <p className="text-center text-gray-600 mb-6">Log in to access your study materials</p>
 
