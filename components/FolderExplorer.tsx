@@ -11,6 +11,7 @@ import {
     Loader2,
     Download,
     BookOpen,
+    Calendar,
     type LucideIcon
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -352,20 +353,21 @@ function FolderItem({ name, icon: Icon, onClick, color, variant = "default" }: F
         <div
             onClick={onClick}
             className={`
-                group cursor-pointer flex flex-col items-center justify-center p-4 
-                rounded-xl border transition-all duration-200
+                group cursor-pointer flex flex-col items-center justify-center p-6 
+                rounded-2xl border transition-all duration-300
                 ${variant === "back"
-                    ? "bg-gray-100 border-transparent hover:bg-gray-200 text-gray-500"
-                    : "bg-white border-gray-100 shadow-sm hover:shadow-md hover:border-blue-200"
+                    ? "bg-gray-50 border-transparent hover:bg-gray-100 text-gray-400"
+                    : "bg-white border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-200"
                 }
             `}
         >
             <div className={`
-                h-12 w-12 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110
+                h-16 w-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300
+                ${variant === "back" ? "bg-gray-200/50" : "bg-blue-50 group-hover:bg-blue-100"}
             `}>
-                <Icon className={`h-6 w-6 ${color || "text-blue-500"}`} />
+                <Icon className={`h-8 w-8 ${variant === "back" ? "text-gray-400" : (color || "text-blue-600")}`} />
             </div>
-            <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
+            <span className="text-sm font-semibold text-gray-800 text-center line-clamp-2 leading-tight px-1">
                 {name}
             </span>
         </div>
@@ -374,32 +376,57 @@ function FolderItem({ name, icon: Icon, onClick, color, variant = "default" }: F
 
 function FileCard({ pdf, onView, onDownload, userId }: { pdf: PdfFile, onView: () => void, onDownload: () => void, userId?: string }) {
     return (
-        <Card className="hover:shadow-md transition-shadow group relative">
-            <CardContent className="p-4 flex flex-col h-full gap-3">
-                <div className="flex items-start justify-between gap-2">
-                    <div className="p-2  rounded-lg">
-                        <FileText className="h-6 w-6 text-red-500" />
+        <Card className="group relative overflow-hidden border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-white rounded-2xl">
+            <CardContent className="p-5 flex flex-col h-full gap-4">
+                <div className="flex items-start justify-between gap-3">
+                    <div className="p-3 bg-red-50 rounded-xl group-hover:bg-red-100 transition-colors duration-300">
+                        <FileText className="h-7 w-7 text-red-600 transition-transform duration-300 group-hover:scale-110" />
                     </div>
-                    {userId && <FavoriteButton pdfId={pdf.id} userId={userId} />}
+                    {userId && (
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <FavoriteButton pdfId={pdf.id} userId={userId} />
+                        </div>
+                    )}
                 </div>
 
-                <div className="space-y-1 flex-1">
-                    <h3 className="font-semibold text-sm line-clamp-2 text-gray-900 leading-snug" title={pdf.name}>
+                <div className="space-y-2 flex-1">
+                    <h3 className="font-bold text-base text-gray-900 leading-tight line-clamp-2 min-h-[2.5rem]" title={pdf.name}>
                         {pdf.name}
                     </h3>
-                    <p className="text-xs text-gray-500 flex items-center gap-1">
-                        <span className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider">PDF</span>
-                        <span>•</span>
-                        <span>{new Date(pdf.created_at).toLocaleDateString()}</span>
-                    </p>
+
+                    <div className="flex flex-wrap gap-2 pt-1">
+                        <span className="px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider">
+                            {pdf.course}
+                        </span>
+                        <span className="px-2 py-1 rounded-md bg-purple-50 text-purple-700 text-[10px] font-bold uppercase tracking-wider">
+                            Level {pdf.level}
+                        </span>
+                        <span className="px-2 py-1 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider">
+                            {pdf.type}
+                        </span>
+                    </div>
+
+                    <div className="flex items-center text-[11px] text-gray-400 mt-2">
+                        <Calendar className="h-3 w-3 mr-1" />
+                        <span>Added {new Date(pdf.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 mt-auto pt-2">
-                    <Button variant="outline" size="sm" onClick={onDownload} className="h-8 text-xs w-full">
-                        <Download className="h-3 w-3 mr-1.5" /> Save
+                <div className="grid grid-cols-2 gap-3 mt-4">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={onDownload}
+                        className="h-10 text-xs font-bold rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 border-none transition-all"
+                    >
+                        <Download className="h-4 w-4 mr-2" /> Download
                     </Button>
-                    <Button size="sm" onClick={onView} className="h-8 text-xs w-full bg-green-600 hover:bg-green-700 text-white">
-                        <BookOpen className="h-3 w-3 mr-1.5" /> View
+                    <Button
+                        size="sm"
+                        onClick={onView}
+                        className="h-10 text-xs font-bold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-blue-200 transition-all border-none"
+                    >
+                        <BookOpen className="h-4 w-4 mr-2" /> Preview
                     </Button>
                 </div>
             </CardContent>
