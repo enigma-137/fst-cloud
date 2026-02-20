@@ -126,7 +126,7 @@ export default function FavoritesPage() {
         </Button>
         </div> */}
       <h1 className="text-2xl font-bold mb-6">My Favorite PDFs</h1>
-      
+
       {favoritePdfs.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12">
           <Image
@@ -145,7 +145,8 @@ export default function FavoritesPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold line-clamp-1 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <FolderOpen fill="green" fillOpacity="0.8" className="h-12 w-12 text-green-700 flex-shrink-0" />
+                    {/* <FolderOpen fill="green" fillOpacity="0.8" className="h-12 w-12 text-green-700 flex-shrink-0" /> */}
+                    <Image src="https://cdn-icons-png.flaticon.com/128/19024/19024994.png" alt={pdf.name} width={50} height={50} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
                     <span>{pdf.name}</span>
                   </div>
                   <FavoriteButton pdfId={pdf.id} userId={user.id} />
