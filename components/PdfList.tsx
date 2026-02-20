@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo, useCallback } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
@@ -56,54 +56,9 @@ export default function PdfList() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
 
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-    }
-    getUser()
-  }, [])
-
-  useEffect(() => {
-    setSearchTerm(searchParams.get('search') || '')
-    setCourseFilter(searchParams.get('course') || null)
-    setLevelFilter(searchParams.get('level') || null)
-    setCurrentPage(parseInt(searchParams.get('page') || '1'))
-  }, [searchParams])
-
-  useEffect(() => {
-    fetchPdfs()
-  }, [currentPage, courseFilter, levelFilter, searchTerm])
-
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [courseFilter, levelFilter, searchTerm])
-
-  useEffect(() => {
-    const params = new URLSearchParams()
-    if (searchTerm) params.set('search', searchTerm)
-    if (courseFilter) params.set('course', courseFilter)
-    if (levelFilter) params.set('level', levelFilter)
-    if (currentPage > 1) params.set('page', currentPage.toString())
-    router.replace(`/dashboard?${params.toString()}`, { scroll: false })
-  }, [searchTerm, courseFilter, levelFilter, currentPage, router])
-
-  useEffect(() => {
-    const subscription = supabase
-      .channel("pdf_files_changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "pdf_files" }, () => {
-        fetchPdfs()
-      })
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [])
-
-  async function fetchPdfs() {
+  const fetchPdfs = useCallback(async () => {
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -142,7 +97,52 @@ export default function PdfList() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase, courseFilter, levelFilter, searchTerm, currentPage, itemsPerPage])
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+    }
+    getUser()
+  }, [supabase])
+
+  useEffect(() => {
+    setSearchTerm(searchParams.get('search') || '')
+    setCourseFilter(searchParams.get('course') || null)
+    setLevelFilter(searchParams.get('level') || null)
+    setCurrentPage(parseInt(searchParams.get('page') || '1'))
+  }, [searchParams])
+
+  useEffect(() => {
+    fetchPdfs()
+  }, [fetchPdfs])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [courseFilter, levelFilter, searchTerm])
+
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (searchTerm) params.set('search', searchTerm)
+    if (courseFilter) params.set('course', courseFilter)
+    if (levelFilter) params.set('level', levelFilter)
+    if (currentPage > 1) params.set('page', currentPage.toString())
+    router.replace(`/dashboard?${params.toString()}`, { scroll: false })
+  }, [searchTerm, courseFilter, levelFilter, currentPage, router])
+
+  useEffect(() => {
+    const subscription = supabase
+      .channel("pdf_files_changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "pdf_files" }, () => {
+        fetchPdfs()
+      })
+      .subscribe()
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [supabase, fetchPdfs])
 
   const courses = Array.from(new Set(allPdfs.map((pdf) => pdf.course.substring(0, 3)))).sort()
   const levels = Array.from(new Set(allPdfs.map((pdf) => pdf.level)))

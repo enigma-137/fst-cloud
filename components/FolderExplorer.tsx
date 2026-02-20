@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { createClient } from "@/lib/supabase"
 import {
     Folder,
@@ -69,19 +69,14 @@ export default function FolderExplorer() {
     const [user, setUser] = useState<User | null>(null)
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
-    const supabase = createClient()
+    const supabase = useMemo(() => createClient(), [])
 
-    useEffect(() => {
-        fetchPdfs()
-        getCurrentUser()
-    }, [])
-
-    const getCurrentUser = async () => {
+    const getCurrentUser = useCallback(async () => {
         const { data: { user } } = await supabase.auth.getUser()
         setUser(user)
-    }
+    }, [supabase])
 
-    const fetchPdfs = async () => {
+    const fetchPdfs = useCallback(async () => {
         setLoading(true)
         try {
             const { data, error } = await supabase
@@ -98,7 +93,12 @@ export default function FolderExplorer() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [supabase])
+
+    useEffect(() => {
+        fetchPdfs()
+        getCurrentUser()
+    }, [fetchPdfs, getCurrentUser])
 
     const rootFolders = [
         { id: "level", name: "By Level", icon: FOLDER_ICONS.level, color: "text-blue-500" },

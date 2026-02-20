@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { createClient } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -29,7 +29,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
   const [user, setUser] = useState<User | null>(null)
   const [notifOpen, setNotifOpen] = useState(false)
   const pathname = usePathname()
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const { notifications } = useNotification()
   useEffect(() => {
     const getUser = async () => {
@@ -37,7 +37,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
       setUser(user)
     }
     getUser()
-  }, [])
+  }, [supabase])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()

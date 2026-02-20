@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { createClient } from "@/lib/supabase"
 import Sidebar from "@/components/Sidebar"
 import { NotificationProvider } from "@/components/NotificationContext"
@@ -14,7 +14,7 @@ export default function DashboardLayout({
   const [isAdmin, setIsAdmin] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -33,7 +33,7 @@ export default function DashboardLayout({
       setLoading(false)
     }
     checkAdminStatus()
-  }, [])
+  }, [supabase])
 
   if (loading) {
     return (

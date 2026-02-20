@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { createClient } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Star } from "lucide-react"
@@ -14,13 +14,9 @@ interface FavoriteButtonProps {
 export default function FavoriteButton({ pdfId, userId }: FavoriteButtonProps) {
   const [isFavorited, setIsFavorited] = useState(false)
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
-  useEffect(() => {
-    checkFavoriteStatus()
-  }, [pdfId, userId])
-
-  const checkFavoriteStatus = async () => {
+  const checkFavoriteStatus = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("favorite_pdfs")
@@ -39,7 +35,11 @@ export default function FavoriteButton({ pdfId, userId }: FavoriteButtonProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase, pdfId, userId])
+
+  useEffect(() => {
+    checkFavoriteStatus()
+  }, [checkFavoriteStatus])
 
   const toggleFavorite = async () => {
     try {
