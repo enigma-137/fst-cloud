@@ -31,14 +31,13 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
   const pathname = usePathname()
   const supabase = createClient()
   const { notifications } = useNotification()
-
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
     }
     getUser()
-  }, [supabase.auth])
+  }, [])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()

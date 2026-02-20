@@ -65,7 +65,7 @@ export default function FolderExplorer() {
     useEffect(() => {
         fetchPdfs()
         getCurrentUser()
-    })
+    }, [])
 
     const getCurrentUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()

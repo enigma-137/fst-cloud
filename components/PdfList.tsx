@@ -67,7 +67,7 @@ export default function PdfList() {
       setUser(user)
     }
     getUser()
-  }, [supabase.auth])
+  }, [])
 
   useEffect(() => {
     setSearchTerm(searchParams.get('search') || '')
@@ -227,45 +227,45 @@ export default function PdfList() {
 
   return (
     <div className="h-full flex flex-col">
-     
-     <div className="sticky top-0 z-10 bg-white flex flex-col items-center md:flex-row md:justify-center gap-2 md:space-x-2 md:gap-0 p-2">
-  <Input
-    type="text"
-    placeholder="Search documents..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    className="w-3/4 md:w-2/4 text-sm py-1"
-  />
-</div>
-  <div className="flex flex-row gap-2 px-2 py-2 w-3/4 md:w-auto md:gap-2">
-    <Select onValueChange={(value) => setCourseFilter(value === "all" ? null : value)}>
-      <SelectTrigger className="w-1/2 md:w-[120px] text-xs px-2 py-1">
-        <SelectValue placeholder="Course" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">All</SelectItem>
-        {courses.map((course) => (
-          <SelectItem key={course} value={course} className="text-xs">
-            {course}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
 
-    <Select onValueChange={(value) => setLevelFilter(value === "all" ? null : value)}>
-      <SelectTrigger className="w-1/2 md:w-[100px] text-xs px-2 py-1">
-        <SelectValue placeholder="Level" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">All</SelectItem>
-        {levels.map((level) => (
-          <SelectItem key={level} value={level} className="text-xs">
-            {level}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </div>
+      <div className="sticky top-0 z-10 bg-white flex flex-col items-center md:flex-row md:justify-center gap-2 md:space-x-2 md:gap-0 p-2">
+        <Input
+          type="text"
+          placeholder="Search documents..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-3/4 md:w-2/4 text-sm py-1"
+        />
+      </div>
+      <div className="flex flex-row gap-2 px-2 py-2 w-3/4 md:w-auto md:gap-2">
+        <Select onValueChange={(value) => setCourseFilter(value === "all" ? null : value)}>
+          <SelectTrigger className="w-1/2 md:w-[120px] text-xs px-2 py-1">
+            <SelectValue placeholder="Course" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            {courses.map((course) => (
+              <SelectItem key={course} value={course} className="text-xs">
+                {course}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select onValueChange={(value) => setLevelFilter(value === "all" ? null : value)}>
+          <SelectTrigger className="w-1/2 md:w-[100px] text-xs px-2 py-1">
+            <SelectValue placeholder="Level" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            {levels.map((level) => (
+              <SelectItem key={level} value={level} className="text-xs">
+                {level}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
 
       {/* Scrollable PDF list */}
@@ -292,10 +292,10 @@ export default function PdfList() {
                 </CardHeader>
                 <CardContent className="flex-1  px-2">
                   <div className="space-y-1">
-                  
+
                     <div className="space-y-0.5">
                       <div className="flex items-center text-[9px] gap-1">
-                        <p  className="bg-blue-50 text-[9px] py-0.5">
+                        <p className="bg-blue-50 text-[9px] py-0.5">
                           Course: {pdf.course}
                         </p>
                         <p className="bg-purple-50 text-[9px] py-0.5">
@@ -319,8 +319,8 @@ export default function PdfList() {
                         </div>
                       </div>
                     )}
-<p className="text-xs text-gray-600"> <span className="font-semibold">Type:</span> {pdf.type}</p>
-                      <div className="flex items-center gap-1 text-xs text-gray-600">
+                    <p className="text-xs text-gray-600"> <span className="font-semibold">Type:</span> {pdf.type}</p>
+                    <div className="flex items-center gap-1 text-xs text-gray-600">
                       <Calendar className="h-3 w-3" />
                       <span>Added: {new Date(pdf.created_at).toLocaleDateString()}</span>
                     </div>

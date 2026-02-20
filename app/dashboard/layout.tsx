@@ -33,7 +33,7 @@ export default function DashboardLayout({
       setLoading(false)
     }
     checkAdminStatus()
-  }, [supabase])
+  }, [])
 
   if (loading) {
     return (
