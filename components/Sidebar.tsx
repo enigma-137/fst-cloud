@@ -127,7 +127,7 @@ export default function Sidebar({ isAdmin }: SidebarProps) {
               <p className="text-sm font-medium truncate">
                 {user?.user_metadata?.full_name ||
                   (user?.email
-                    ? user.email.split("@")[0].charAt(0).toUpperCase() + user.email.split("@")[0].slice(1)
+                    ? "FST-CLOUD"
                     : "")
                 }
               </p>
