@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import { Download, Loader2Icon, Calendar, Tag, BookOpen, FileText } from "lucide-react"
+import { Download, Loader2Icon, Calendar, BookOpen } from "lucide-react"
 import { toast } from "sonner"
 import { AuthModal } from "./AuthModal"
 import FavoriteButton from "./FavoriteButton"
@@ -27,18 +27,18 @@ interface PdfFile {
   tags: string[]
 }
 
-const getTagColor = (tag: string) => {
-  const colors = [
-    "bg-blue-100 text-blue-700",
-    "bg-green-100 text-green-700",
-    "bg-purple-100 text-purple-700",
-    "bg-pink-100 text-pink-700",
-    "bg-yellow-100 text-yellow-700",
-    "bg-indigo-100 text-indigo-700",
-  ]
-  const hash = tag.split("").reduce((acc, char) => char.charCodeAt(0) + acc, 0)
-  return colors[hash % colors.length]
-}
+// const getTagColor = (tag: string) => {
+//   const colors = [
+//     "bg-blue-100 text-blue-700",
+//     "bg-green-100 text-green-700",
+//     "bg-purple-100 text-purple-700",
+//     "bg-pink-100 text-pink-700",
+//     "bg-yellow-100 text-yellow-700",
+//     "bg-indigo-100 text-indigo-700",
+//   ]
+//   const hash = tag.split("").reduce((acc, char) => char.charCodeAt(0) + acc, 0)
+//   return colors[hash % colors.length]
+// }
 
 export default function PdfList() {
   const searchParams = useSearchParams()
@@ -93,7 +93,7 @@ export default function PdfList() {
   useEffect(() => {
     const subscription = supabase
       .channel("pdf_files_changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "pdf_files" }, (payload) => {
+      .on("postgres_changes", { event: "*", schema: "public", table: "pdf_files" }, () => {
         fetchPdfs()
       })
       .subscribe()
