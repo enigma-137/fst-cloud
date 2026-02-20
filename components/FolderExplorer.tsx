@@ -21,6 +21,7 @@ import { toast } from "sonner"
 import type { User } from "@supabase/supabase-js"
 import { AuthModal } from "./AuthModal"
 import FavoriteButton from "./FavoriteButton"
+import Image from "next/image"
 
 // Duplicate interface from PdfList for now (should be shared later)
 interface PdfFile {
@@ -41,16 +42,25 @@ type GroupingType = "level" | "course" | "type" | "year"
 interface FolderData {
     id: string
     name: string
-    icon: LucideIcon
+    icon: any
     color?: string
 }
 
 interface FolderItemProps {
     name: string
-    icon: LucideIcon
+    icon: any
     onClick: () => void
     color?: string
     variant?: "default" | "back"
+}
+
+const FOLDER_ICONS = {
+    level: "https://cdn-icons-png.flaticon.com/128/2097/2097068.png",
+    course: "https://cdn-icons-png.flaticon.com/128/18991/18991804.png",
+    type: "https://cdn-icons-png.flaticon.com/128/2232/2232688.png",
+    year: "https://cdn-icons-png.flaticon.com/128/3038/3038168.png",
+    pdf: "https://cdn-icons-png.flaticon.com/128/337/337946.png",
+    back: "https://cdn-icons-png.flaticon.com/128/271/271220.png"
 }
 
 export default function FolderExplorer() {
@@ -93,10 +103,10 @@ export default function FolderExplorer() {
     }
 
     const rootFolders = [
-        { id: "level", name: "By Level", icon: Folder, color: "text-blue-500" },
-        { id: "course", name: "By Course", icon: Folder, color: "text-green-500" },
-        { id: "type", name: "By Type", icon: Folder, color: "text-purple-500" },
-        { id: "year", name: "By Year", icon: Folder, color: "text-orange-500" },
+        { id: "level", name: "By Level", icon: FOLDER_ICONS.level, color: "text-blue-500" },
+        { id: "course", name: "By Course", icon: FOLDER_ICONS.course, color: "text-green-500" },
+        { id: "type", name: "By Type", icon: FOLDER_ICONS.type, color: "text-purple-500" },
+        { id: "year", name: "By Year", icon: FOLDER_ICONS.year, color: "text-orange-500" },
     ]
 
     // Helper to get content based on current path
@@ -116,36 +126,34 @@ export default function FolderExplorer() {
                 const levels = Array.from(new Set(pdfs.map(p => p.level || "Unknown"))).sort()
                 return {
                     type: "folders",
-                    items: levels.map(l => ({ id: l, name: `Level ${l}`, icon: Folder }))
+                    items: levels.map(l => ({ id: l, name: `Level ${l}`, icon: FOLDER_ICONS.level }))
                 }
             }
             if (grouping === "course") {
                 const courses = Array.from(new Set(pdfs.map(p => p.course || "Unknown"))).sort()
                 return {
                     type: "folders",
-                    items: courses.map(c => ({ id: c, name: c, icon: Folder }))
+                    items: courses.map(c => ({ id: c, name: c, icon: FOLDER_ICONS.course }))
                 }
             }
             if (grouping === "type") {
                 const types = Array.from(new Set(pdfs.map(p => p.type || "Other"))).sort()
                 return {
                     type: "folders",
-                    items: types.map(t => ({ id: t, name: t, icon: Folder }))
+                    items: types.map(t => ({ id: t, name: t, icon: FOLDER_ICONS.type }))
                 }
             }
             if (grouping === "year") {
                 const years = Array.from(new Set(pdfs.map(p => new Date(p.created_at).getFullYear().toString()))).sort((a, b) => b.localeCompare(a))
                 return {
                     type: "folders",
-                    items: years.map(y => ({ id: y, name: y, icon: Folder }))
+                    items: years.map(y => ({ id: y, name: y, icon: FOLDER_ICONS.year }))
                 }
             }
         }
 
         // Level 2: Sub-groups or Files
         if (currentPath.length === 2) {
-            // By Level -> "100" -> Show Courses in that level (OR just files?)
-            // Let's do Level -> Course -> Files for better organization
             if (grouping === "level") {
                 const coursesInLevel = Array.from(new Set(
                     pdfs.filter(p => p.level === level1Value).map(p => p.course)
@@ -153,9 +161,10 @@ export default function FolderExplorer() {
 
                 return {
                     type: "folders",
-                    items: coursesInLevel.map(c => ({ id: c, name: c, icon: Folder }))
+                    items: coursesInLevel.map(c => ({ id: c, name: c, icon: FOLDER_ICONS.course }))
                 }
             }
+            // ... rest handled by switch or if-else
 
             // By Course -> "CHEM101" -> Show Files
             if (grouping === "course") {
@@ -288,8 +297,8 @@ export default function FolderExplorer() {
                         {/* Back Button if not at root */}
                         {currentPath.length > 0 && (
                             <FolderItem
-                                name=".."
-                                icon={ArrowLeft}
+                                name="Back"
+                                icon={FOLDER_ICONS.back}
                                 onClick={() => setCurrentPath(prev => prev.slice(0, -1))}
                                 variant="back"
                             />
@@ -348,7 +357,8 @@ export default function FolderExplorer() {
 
 // --- Sub-components ---
 
-function FolderItem({ name, icon: Icon, onClick, color, variant = "default" }: FolderItemProps) {
+function FolderItem({ name, icon, onClick, color, variant = "default" }: FolderItemProps) {
+    const isUrl = typeof icon === 'string';
     return (
         <div
             onClick={onClick}
@@ -363,9 +373,13 @@ function FolderItem({ name, icon: Icon, onClick, color, variant = "default" }: F
         >
             <div className={`
                 h-16 w-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300
-                ${variant === "back" ? "bg-gray-200/50" : "bg-blue-50 group-hover:bg-blue-100"}
+                ${variant === "back" ? "bg-gray-200/50" : "group-hover:bg-blue-100"}
             `}>
-                <Icon className={`h-8 w-8 ${variant === "back" ? "text-gray-400" : (color || "text-blue-600")}`} />
+                {isUrl ? (
+                    <Image src={icon} alt={name} width={50} height={50} className="rounded-lg object-contain transition-transform group-hover:scale-110" />
+                ) : (
+                    <div className={`h-8 w-8 ${variant === "back" ? "text-gray-400" : (color || "text-blue-600")}`} />
+                )}
             </div>
             <span className="text-sm font-semibold text-gray-800 text-center line-clamp-2 leading-tight px-1">
                 {name}
@@ -379,8 +393,8 @@ function FileCard({ pdf, onView, onDownload, userId }: { pdf: PdfFile, onView: (
         <Card className="group relative overflow-hidden border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-white rounded-2xl">
             <CardContent className="p-5 flex flex-col h-full gap-4">
                 <div className="flex items-start justify-between gap-3">
-                    <div className="p-3 bg-red-50 rounded-xl group-hover:bg-red-100 transition-colors duration-300">
-                        <FileText className="h-7 w-7 text-red-600 transition-transform duration-300 group-hover:scale-110" />
+                    <div className=" rounded-xl group-hover:bg-red-100 transition-colors duration-300">
+                        <Image src={FOLDER_ICONS.pdf} alt={pdf.name} width={50} height={50} className="rounded-lg transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     {userId && (
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -424,7 +438,7 @@ function FileCard({ pdf, onView, onDownload, userId }: { pdf: PdfFile, onView: (
                     <Button
                         size="sm"
                         onClick={onView}
-                        className="h-10 text-xs font-bold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-blue-200 transition-all border-none"
+                        className="h-10 text-xs font-bold rounded-xl bg-green-600 hover:bg-green-600 text-white shadow-md hover:shadow-green-200 transition-all border-none"
                     >
                         <BookOpen className="h-4 w-4 mr-2" /> Preview
                     </Button>

@@ -234,8 +234,14 @@ export default function PdfList() {
               <Card key={pdf.id} className="group relative overflow-hidden border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-white rounded-2xl">
                 <CardContent className="p-5 flex flex-col h-full gap-4">
                   <div className="flex items-start justify-between gap-3">
-                    <div className=" transition-colors duration-300">
-                      <Image src="https://cdn-icons-png.flaticon.com/128/2097/2097068.png" alt={pdf.name} width={50} height={50} className="rounded-lg" />
+                    <div className="p-3 bg-red-50 rounded-xl group-hover:bg-red-100 transition-colors duration-300">
+                      <Image
+                        src="https://cdn-icons-png.flaticon.com/128/337/337946.png"
+                        alt={pdf.name}
+                        width={50}
+                        height={50}
+                        className="rounded-lg transition-transform duration-300 group-hover:scale-110"
+                      />
                     </div>
                     {user && (
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
