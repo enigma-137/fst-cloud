@@ -184,7 +184,7 @@ export default function PdfList() {
   return (
     <div className="h-full flex flex-col">
       <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md flex flex-col items-center md:flex-row md:justify-center gap-4 p-4 border-b border-gray-100">
-        <div className="relative w-full md:w-1/3">
+        <div className="relative w-full md:w-1/3 mt-8 md:mt-0">
           <Input
             type="text"
             placeholder="Search documents..."
