@@ -261,7 +261,7 @@ export default function FolderExplorer() {
     return (
         <div className="flex flex-col h-full space-y-4">
             {/* Header & Breadcrumbs */}
-            <div className="flex items-center gap-2  p-3 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
+            <div className="flex items-center gap-2  p-3 mt-8 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
                 <Button
                     variant="ghost"
                     size="icon"
